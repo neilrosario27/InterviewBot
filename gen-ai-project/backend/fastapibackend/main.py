@@ -9,6 +9,7 @@ from rag import *
 from tempfile import NamedTemporaryFile
 from dotenv import load_dotenv
 import json
+import requests
 
 load_dotenv()
 
@@ -232,26 +233,31 @@ async def get_audio(language: str = Form(...), audio: UploadFile = File(...)):
         return JSONResponse(content={"success": False, "message": "Error processing audio"}, status_code=500)
     
 
+input_lang = ""
+
 @app.post("/gettext/")
 async def get_text(text: str = Form(...), language: str = Form(...)):
     try:
         if language == 'hindi':
-            tt_hin_eng = hindi_to_english(text)
-            text_query_pdf = starting_point(tt_hin_eng)
-            tt_eng_hin = english_to_hindi(text_query_pdf)
-            response_text = tt_eng_hin
+            input_lang = "hi"
+            input_to_query = indic_to_english(input_lang, text)
+            answer_to_indic = starting_point(input_to_query)    # change to conv chain
+            final_answer = english_to_indic(input_lang, answer_to_indic)
+            response_text = final_answer
         elif language == 'marathi':
-            tt_mar_eng = marathi_to_english(text)
-            text_query_pdf = starting_point(tt_mar_eng)
-            tt_eng_mar = english_to_marathi(text_query_pdf)
-            response_text = tt_eng_mar
+            input_lang = "mr"
+            input_to_query = indic_to_english(input_lang, text)
+            answer_to_indic = starting_point(input_to_query)      # change to conv chain
+            final_answer = english_to_indic(input_lang, answer_to_indic)
+            response_text = final_answer
         elif language == 'tamil':
-            tt_tam_eng = tamil_to_english(text)
-            text_query_pdf = starting_point(tt_tam_eng)
-            tt_eng_tam = english_to_tamil(text_query_pdf)
-            response_text = tt_eng_tam
+            input_lang = "ta"
+            input_to_query = indic_to_english(input_lang, text)
+            answer_to_indic = starting_point(input_to_query)        # change to conv chain
+            final_answer = english_to_indic(input_lang, answer_to_indic)
+            response_text = final_answer
         else:
-            text_query_pdf = starting_point(text)
+            text_query_pdf = starting_point(text)       # change to conv chain
             response_text = text_query_pdf
         return JSONResponse(content={"text": response_text, "success": True}, status_code=200)
     except Exception as e:
@@ -259,54 +265,177 @@ async def get_text(text: str = Form(...), language: str = Form(...)):
         return JSONResponse(content={"success": False, "message": "Error processing text"}, status_code=500)
 
 
-@app.post("/getmcq/")
-async def mcq(topic: str = Form(...), number: int  = Form(...)):
-    if(number<=0):
-        return JSONResponse(content={"message":"Invalid number of questions, please enter number greater than 0"}, status_code=500)
-    else:
-        try:
-            result = get_mcq(topic,number)
-            data = json.loads(result)
-            formatted=[]
-            for question_ob in data:
-                question = question_ob["question"]
-                answer = question_ob["answer"]
-                options = [question_ob["option1"],question_ob["option2"],question_ob["option3"]]
-                formatted_question={
-                    "question":question,
-                    "answer":answer,
-                    "options":options
+
+def indic_to_english(input_lang, input_text):
+    url1 = "https://meity-auth.ulcacontrib.org/ulca/apis/v0/model/getModelsPipeline"
+
+    headers1 = {
+        "Content-Type": "application/json",
+        "ulcaApiKey": "3653475f10-336b-4d31-b3d3-713cf1b0d48a",
+        "userID": "1930b643ca2d4589b2bf9157cb2d7f3d"
+    }
+
+    payload1 = {
+        "pipelineTasks": [{
+            "taskType": "translation",
+            "config": {
+                "language": {
+                    "sourceLanguage": input_lang,
+                    "targetLanguage": "en"
                 }
-                formatted.append(formatted_question)
-            return JSONResponse(formatted,status_code=200)
-        except Exception as e:
-            print(f"Error: {str(e)}")
-            return JSONResponse(content={"success": False, "message": "Can't generate these many MCQs"}, status_code=500)
-
-@app.post("/getviva/")
-async def viva(topic: str = Form(...)):
-    try:
-        result = get_viva(topic)
-        return JSONResponse(result,status_code=200)
-    except Exception as e:
-        print(f"Error: {str(e)}")
-        return JSONResponse(content={"success": False, "message": "Can't generate viva questions"}, status_code=500)
-
-@app.post("/geturl/")
-async def url(url: str = Form(...)):
-    try:
-        result = process_pinecone_url(url)
-        return JSONResponse(result,status_code=200)
-    except Exception as e:
-        print(f"Error: {str(e)}")
-        return JSONResponse(content={"success": False, "message": "Can't store in pinecone"}, status_code=500)
+            }
+        }],
 
 
-@app.post("/getsummary/")
-async def summary(topic: str = Form(...)):
-    try:
-        result = get_summary(topic)
-        return JSONResponse(result,status_code=200)
-    except Exception as e:
-        print(f"Error: {str(e)}")
-        return JSONResponse(content={"success": False, "message": "Can't generate Summary"}, status_code=500)
+        "pipelineRequestConfig": {
+            "pipelineId": "64392f96daac500b55c543cd"
+        }
+    }
+
+    response = requests.post(url1, json=payload1, headers=headers1)
+
+    if response.status_code == 200:
+        # Parsing the response JSON
+        response_data = response.json()
+        # print("Success:", response_data)
+    else:
+        print("Error:", response.status_code, response.text)
+        
+
+    compute_url = response_data['pipelineInferenceAPIEndPoint']['callbackUrl']
+    header_name = response_data['pipelineInferenceAPIEndPoint']['inferenceApiKey']['name']
+    header_value = response_data['pipelineInferenceAPIEndPoint']['inferenceApiKey']['value']
+    payload_serviceID = response_data['pipelineResponseConfig'][0]['config'][0]['serviceId']
+    payload_modelId = response_data['pipelineResponseConfig'][0]['config'][0]['modelId']
+
+
+
+    url2 = compute_url
+
+    headers2 = {
+        header_name : header_value
+    }
+
+    payload2 = {
+        "pipelineTasks": [
+            {
+                "taskType": "translation",
+                "config": {
+                    "language": {
+                        "sourceLanguage": input_lang,
+                        "targetLanguage": "en"
+                    },
+                    "serviceId": payload_serviceID,
+                    "modelId": payload_modelId
+                }
+            }
+        ],
+        "inputData": {
+            "input": [
+                {
+                    "source": input_text
+                }
+            ]
+        }
+    }
+
+
+    response = requests.post(url2, json=payload2, headers=headers2)
+
+    if response.status_code == 200:
+        translated_text = response.json()
+        # print("Translated text:", translated_text)
+    else:
+        print("Error:", response.status_code, response.text)
+
+
+    output_text = translated_text['pipelineResponse'][0]['output'][0]['target']
+    return output_text
+
+def english_to_indic(input_lang, input_text):
+    url1 = "https://meity-auth.ulcacontrib.org/ulca/apis/v0/model/getModelsPipeline"
+
+    headers1 = {
+        "Content-Type": "application/json",
+        "ulcaApiKey": "3653475f10-336b-4d31-b3d3-713cf1b0d48a",
+        "userID": "1930b643ca2d4589b2bf9157cb2d7f3d"
+    }
+
+    payload1 = {
+        "pipelineTasks": [{
+            "taskType": "translation",
+            "config": {
+                "language": {
+                    "sourceLanguage": "en",
+                    "targetLanguage": input_lang
+                }
+            }
+        }],
+
+
+        "pipelineRequestConfig": {
+            "pipelineId": "64392f96daac500b55c543cd"
+        }
+    }
+
+    response = requests.post(url1, json=payload1, headers=headers1)
+
+    if response.status_code == 200:
+        # Parsing the response JSON
+        response_data = response.json()
+        # print("Success:", response_data)
+    else:
+        print("Error:", response.status_code, response.text)
+        
+
+    compute_url = response_data['pipelineInferenceAPIEndPoint']['callbackUrl']
+    header_name = response_data['pipelineInferenceAPIEndPoint']['inferenceApiKey']['name']
+    header_value = response_data['pipelineInferenceAPIEndPoint']['inferenceApiKey']['value']
+    payload_serviceID = response_data['pipelineResponseConfig'][0]['config'][0]['serviceId']
+    payload_modelId = response_data['pipelineResponseConfig'][0]['config'][0]['modelId']
+
+
+
+    url2 = compute_url
+
+    headers2 = {
+        header_name : header_value
+    }
+
+    payload2 = {
+        "pipelineTasks": [
+            {
+                "taskType": "translation",
+                "config": {
+                    "language": {
+                        "sourceLanguage": "en",
+                        "targetLanguage": input_lang
+                    },
+                    "serviceId": payload_serviceID,
+                    "modelId": payload_modelId
+                }
+            }
+        ],
+        "inputData": {
+            "input": [
+                {
+                    "source": input_text
+                }
+            ]
+        }
+    }
+
+
+    response = requests.post(url2, json=payload2, headers=headers2)
+
+    if response.status_code == 200:
+        translated_text = response.json()
+        # print("Translated text:", translated_text)
+    else:
+        print("Error:", response.status_code, response.text)
+
+
+    output_text = translated_text['pipelineResponse'][0]['output'][0]['target']
+    return output_text
+
+            
