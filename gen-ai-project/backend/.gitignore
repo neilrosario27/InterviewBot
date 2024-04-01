@@ -3,3 +3,8 @@ Rev.mp3
 myvenv
 .env
 __pycache__
+.gitattributes
+Record (online-voice-recorder.com) (2).mp3
+english-malaria.mp3
+venv/
+backend/.gitignore
