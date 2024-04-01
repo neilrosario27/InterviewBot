@@ -267,7 +267,6 @@ async def get_text(text: str = Form(...), language: str = Form(...)):
     try:
         if language == 'hindi':
             input_lang = "hi"
-            print("Pinecone version:", pinecone.__version__)
             input_to_query = indic_to_english_text(input_lang, text)
             answer_to_indic = starting_point(input_to_query)    # change to conv chain
             final_answer = english_to_indic_text(input_lang, answer_to_indic)
@@ -280,6 +279,120 @@ async def get_text(text: str = Form(...), language: str = Form(...)):
             response_text = final_answer
         elif language == 'tamil':
             input_lang = "ta"
+            input_to_query = indic_to_english_text(input_lang, text)
+            answer_to_indic = starting_point(input_to_query)        # change to conv chain
+            final_answer = english_to_indic_text(input_lang, answer_to_indic)
+            response_text = final_answer
+        elif language == 'gom':
+            input_lang = "gom"
+            input_to_query = indic_to_english_text(input_lang, text)
+            answer_to_indic = starting_point(input_to_query)        # change to conv chain
+            final_answer = english_to_indic_text(input_lang, answer_to_indic)
+            response_text = final_answer
+        elif language == 'kannada':
+            input_lang = "kn"
+            input_to_query = indic_to_english_text(input_lang, text)
+            answer_to_indic = starting_point(input_to_query)        # change to conv chain
+            final_answer = english_to_indic_text(input_lang, answer_to_indic)
+            response_text = final_answer
+        elif language == 'dogri':
+            input_lang = "doi"
+            input_to_query = indic_to_english_text(input_lang, text)
+            answer_to_indic = starting_point(input_to_query)        # change to conv chain
+            final_answer = english_to_indic_text(input_lang, answer_to_indic)
+            response_text = final_answer
+        elif language == 'bodo':
+            input_lang = "brx"
+            input_to_query = indic_to_english_text(input_lang, text)
+            answer_to_indic = starting_point(input_to_query)        # change to conv chain
+            final_answer = english_to_indic_text(input_lang, answer_to_indic)
+            response_text = final_answer
+        elif language == 'urdu':
+            input_lang = "ur"
+            input_to_query = indic_to_english_text(input_lang, text)
+            answer_to_indic = starting_point(input_to_query)        # change to conv chain
+            final_answer = english_to_indic_text(input_lang, answer_to_indic)
+            response_text = final_answer
+        elif language == 'kashmiri':
+            input_lang = "ks"
+            input_to_query = indic_to_english_text(input_lang, text)
+            answer_to_indic = starting_point(input_to_query)        # change to conv chain
+            final_answer = english_to_indic_text(input_lang, answer_to_indic)
+            response_text = final_answer
+        elif language == 'assamese':
+            input_lang = "as"
+            input_to_query = indic_to_english_text(input_lang, text)
+            answer_to_indic = starting_point(input_to_query)        # change to conv chain
+            final_answer = english_to_indic_text(input_lang, answer_to_indic)
+            response_text = final_answer
+        elif language == 'bengali':
+            input_lang = "bn"
+            input_to_query = indic_to_english_text(input_lang, text)
+            answer_to_indic = starting_point(input_to_query)        # change to conv chain
+            final_answer = english_to_indic_text(input_lang, answer_to_indic)
+            response_text = final_answer
+        elif language == 'sindhi':
+            input_lang = "sd"
+            input_to_query = indic_to_english_text(input_lang, text)
+            answer_to_indic = starting_point(input_to_query)        # change to conv chain
+            final_answer = english_to_indic_text(input_lang, answer_to_indic)
+            response_text = final_answer
+        elif language == 'maithili':
+            input_lang = "mai"
+            input_to_query = indic_to_english_text(input_lang, text)
+            answer_to_indic = starting_point(input_to_query)        # change to conv chain
+            final_answer = english_to_indic_text(input_lang, answer_to_indic)
+            response_text = final_answer
+        elif language == 'punjabi':
+            input_lang = "pa"
+            input_to_query = indic_to_english_text(input_lang, text)
+            answer_to_indic = starting_point(input_to_query)        # change to conv chain
+            final_answer = english_to_indic_text(input_lang, answer_to_indic)
+            response_text = final_answer
+        elif language == 'malayalam':
+            input_lang = "ml"
+            input_to_query = indic_to_english_text(input_lang, text)
+            answer_to_indic = starting_point(input_to_query)        # change to conv chain
+            final_answer = english_to_indic_text(input_lang, answer_to_indic)
+            response_text = final_answer
+        elif language == 'manipuri':
+            input_lang = "mni"
+            input_to_query = indic_to_english_text(input_lang, text)
+            answer_to_indic = starting_point(input_to_query)        # change to conv chain
+            final_answer = english_to_indic_text(input_lang, answer_to_indic)
+            response_text = final_answer
+        elif language == 'telugu':
+            input_lang = "te"
+            input_to_query = indic_to_english_text(input_lang, text)
+            answer_to_indic = starting_point(input_to_query)        # change to conv chain
+            final_answer = english_to_indic_text(input_lang, answer_to_indic)
+            response_text = final_answer
+        elif language == 'sanskrit':
+            input_lang = "sa"
+            input_to_query = indic_to_english_text(input_lang, text)
+            answer_to_indic = starting_point(input_to_query)        # change to conv chain
+            final_answer = english_to_indic_text(input_lang, answer_to_indic)
+            response_text = final_answer
+        elif language == 'nepali':
+            input_lang = "ne"
+            input_to_query = indic_to_english_text(input_lang, text)
+            answer_to_indic = starting_point(input_to_query)        # change to conv chain
+            final_answer = english_to_indic_text(input_lang, answer_to_indic)
+            response_text = final_answer
+        elif language == 'santali':
+            input_lang = "sat"
+            input_to_query = indic_to_english_text(input_lang, text)
+            answer_to_indic = starting_point(input_to_query)        # change to conv chain
+            final_answer = english_to_indic_text(input_lang, answer_to_indic)
+            response_text = final_answer
+        elif language == 'gujarati':
+            input_lang = "gu"
+            input_to_query = indic_to_english_text(input_lang, text)
+            answer_to_indic = starting_point(input_to_query)        # change to conv chain
+            final_answer = english_to_indic_text(input_lang, answer_to_indic)
+            response_text = final_answer
+        elif language == 'odia':
+            input_lang = "or"
             input_to_query = indic_to_english_text(input_lang, text)
             answer_to_indic = starting_point(input_to_query)        # change to conv chain
             final_answer = english_to_indic_text(input_lang, answer_to_indic)
@@ -687,8 +800,3 @@ def english_to_indic_voice(output_lang, input_text):
 
   return data['pipelineResponse'][1]['audio'][0]['audioContent']
 
-
-
-=======
-                  
->>>>>>> Stashed changes

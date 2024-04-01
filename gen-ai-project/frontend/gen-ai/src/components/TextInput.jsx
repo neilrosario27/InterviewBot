@@ -57,25 +57,25 @@ const TextInput = ({ updateTextValue }) => {
           <option value="hindi">Hindi</option>
           <option value="marathi">Marathi</option>
           <option value="tamil">Tamil</option>
-          <option value="tamil">Gom</option>
-          <option value="tamil">Kannada</option>
-          <option value="tamil">Dogri</option>
-          <option value="tamil">Bodo</option>
-          <option value="tamil">Urdu</option>
-          <option value="tamil">Kashmiri</option>
-          <option value="tamil">Assamese</option>
-          <option value="tamil">Bengali</option>
-          <option value="tamil">Sindhi</option>
-          <option value="tamil">Maithili</option>
-          <option value="tamil">Punjabi</option>
-          <option value="tamil">Malayalam</option>
-          <option value="tamil">Manipuri</option>
-          <option value="tamil">Telugu</option>
-          <option value="tamil">Sanskrit</option>
-          <option value="tamil">Nepali</option>
-          <option value="tamil">Santali</option>
-          <option value="tamil">Gujarati</option>
-          <option value="tamil">Odia</option>
+          <option value="gom">Gom</option>
+          <option value="kannada">Kannada</option>
+          <option value="dogri">Dogri</option>
+          <option value="bodo">Bodo</option>
+          <option value="urdu">Urdu</option>
+          <option value="kashmiri">Kashmiri</option>
+          <option value="assamese">Assamese</option>
+          <option value="bengali">Bengali</option>
+          <option value="sindhi">Sindhi</option>
+          <option value="maithili">Maithili</option>
+          <option value="punjabi">Punjabi</option>
+          <option value="malayalam">Malayalam</option>
+          <option value="manipuri">Manipuri</option>
+          <option value="telugu">Telugu</option>
+          <option value="sanskrit">Sanskrit</option>
+          <option value="nepali">Nepali</option>
+          <option value="santali">Santali</option>
+          <option value="gujarati">Gujarati</option>
+          <option value="odia">Odia</option>
         </select>
       </form>
     </div>
