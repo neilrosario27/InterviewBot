@@ -10,6 +10,10 @@ from tempfile import NamedTemporaryFile
 from dotenv import load_dotenv
 import json
 import requests
+# import librosa
+import base64
+from pydub import AudioSegment
+import shutil
 
 load_dotenv()
 
@@ -185,22 +189,40 @@ async def get_audio(language: str = Form(...), audio: UploadFile = File(...)):
         with open(audio.filename, "wb") as buffer:
             buffer.write(audio.file.read())
         audio_input = open(audio.filename,"rb")
+
+        
+
         if language == 'hindi':
+
+            # input_lang = "hi"
+            # print("base64 :" ,base64_input)
+            # query = indic_to_english_voice(input_lang, base64_input)
+            # print(query)
+            # answer_eng = starting_point(query)
+            # # print(answer_eng)
+            # base64_output = english_to_indic_voice(input_lang, answer_eng)
+            # final_output = convert_to_mp3(base64_output)
+
+
+            input_lang = "hi"
+
             stt_hin = mp3_to_text_hindi(audio_input)
-            tt_hin_eng = hindi_to_english(stt_hin)
+            tt_hin_eng = indic_to_english_text(input_lang, stt_hin)
             text_query_pdf = starting_point(tt_hin_eng)
-            tt_eng_hin = english_to_hindi(text_query_pdf)
-            tts_hin = hindi_text_to_mp3(tt_eng_hin)
+            tt_eng_hin = english_to_indic_text(input_lang, text_query_pdf)
+            tts_hin = hindi_text_to_mp3(tt_eng_hin)    
             def iterfile():
                 with open(tts_hin, "rb") as audio_file:
                     yield from audio_file
                 os.remove(tts_hin)
             return StreamingResponse(iterfile(),media_type="application/octet-stream")
         elif language == 'marathi':
+
+            input_lang = "mr"
             stt_mar = mp3_to_text_marathi(audio_input)
-            tt_mar_eng = marathi_to_english(stt_mar)
+            tt_mar_eng = indic_to_english_text(input_lang, stt_mar)
             text_query_pdf = starting_point(tt_mar_eng)
-            tt_eng_mar = english_to_marathi(text_query_pdf)
+            tt_eng_mar = english_to_indic_text(input_lang, text_query_pdf)
             tts_mar = marathi_text_to_mp3(tt_eng_mar)
             def iterfile():
                 with open(tts_mar, "rb") as audio_file:
@@ -208,10 +230,12 @@ async def get_audio(language: str = Form(...), audio: UploadFile = File(...)):
                 os.remove(tts_mar)
             return StreamingResponse(iterfile(),media_type="application/octet-stream")
         elif language == 'tamil':
+
+            input_lang="ta"
             stt_tam = mp3_to_text_tamil(audio_input)
-            tt_tam_eng = tamil_to_english(stt_tam)
+            tt_tam_eng = indic_to_english_text(input_lang, stt_tam)
             text_query_pdf = starting_point(tt_tam_eng)
-            tt_eng_tam = english_to_tamil(text_query_pdf)
+            tt_eng_tam = english_to_indic_text(input_lang, text_query_pdf)
             tts_tam = tamil_text_to_mp3(tt_eng_tam)
             def iterfile():
                 with open(tts_tam, "rb") as audio_file:
@@ -222,6 +246,8 @@ async def get_audio(language: str = Form(...), audio: UploadFile = File(...)):
             stt_eng = mp3_to_text_english(audio_input)
             text_query_pdf = starting_point(stt_eng)
             tts_eng = english_text_to_mp3(text_query_pdf)
+            print("english_output")
+            print(  type(tts_eng))
             def iterfile():
                 with open(tts_eng, "rb") as audio_file:
                     yield from audio_file
@@ -233,6 +259,7 @@ async def get_audio(language: str = Form(...), audio: UploadFile = File(...)):
         return JSONResponse(content={"success": False, "message": "Error processing audio"}, status_code=500)
     
 
+
 input_lang = ""
 
 @app.post("/gettext/")
@@ -240,21 +267,22 @@ async def get_text(text: str = Form(...), language: str = Form(...)):
     try:
         if language == 'hindi':
             input_lang = "hi"
-            input_to_query = indic_to_english(input_lang, text)
+            print("Pinecone version:", pinecone.__version__)
+            input_to_query = indic_to_english_text(input_lang, text)
             answer_to_indic = starting_point(input_to_query)    # change to conv chain
-            final_answer = english_to_indic(input_lang, answer_to_indic)
+            final_answer = english_to_indic_text(input_lang, answer_to_indic)
             response_text = final_answer
         elif language == 'marathi':
             input_lang = "mr"
-            input_to_query = indic_to_english(input_lang, text)
+            input_to_query = indic_to_english_text(input_lang, text)
             answer_to_indic = starting_point(input_to_query)      # change to conv chain
-            final_answer = english_to_indic(input_lang, answer_to_indic)
+            final_answer = english_to_indic_text(input_lang, answer_to_indic)
             response_text = final_answer
         elif language == 'tamil':
             input_lang = "ta"
-            input_to_query = indic_to_english(input_lang, text)
+            input_to_query = indic_to_english_text(input_lang, text)
             answer_to_indic = starting_point(input_to_query)        # change to conv chain
-            final_answer = english_to_indic(input_lang, answer_to_indic)
+            final_answer = english_to_indic_text(input_lang, answer_to_indic)
             response_text = final_answer
         else:
             text_query_pdf = starting_point(text)       # change to conv chain
@@ -266,7 +294,7 @@ async def get_text(text: str = Form(...), language: str = Form(...)):
 
 
 
-def indic_to_english(input_lang, input_text):
+def indic_to_english_text(input_lang, input_text):
     url1 = "https://meity-auth.ulcacontrib.org/ulca/apis/v0/model/getModelsPipeline"
 
     headers1 = {
@@ -352,7 +380,7 @@ def indic_to_english(input_lang, input_text):
     output_text = translated_text['pipelineResponse'][0]['output'][0]['target']
     return output_text
 
-def english_to_indic(input_lang, input_text):
+def english_to_indic_text(input_lang, input_text):
     url1 = "https://meity-auth.ulcacontrib.org/ulca/apis/v0/model/getModelsPipeline"
 
     headers1 = {
@@ -439,3 +467,229 @@ def english_to_indic(input_lang, input_text):
     return output_text
 
             
+
+
+
+
+
+
+def indic_to_english_voice(input_lang, input_audio_base64):
+  url1 = "https://meity-auth.ulcacontrib.org/ulca/apis/v0/model/getModelsPipeline"
+
+  headers1 = {
+      "Content-Type": "application/json",
+      "ulcaApiKey": "3653475f10-336b-4d31-b3d3-713cf1b0d48a",
+      "userID": "1930b643ca2d4589b2bf9157cb2d7f3d"
+  }
+
+  payload1 = {
+      "pipelineTasks" : [
+        {
+              "taskType": "asr",
+              "config": {
+                  "language": {
+                      "sourceLanguage": input_lang
+                  }
+              }
+          },
+        {
+          "taskType": "translation",
+          "config": {
+              "language": {
+                  "sourceLanguage": input_lang,
+                  "targetLanguage": "en"
+              }
+          }
+      }
+      ],
+
+      "pipelineRequestConfig": {
+          "pipelineId": "64392f96daac500b55c543cd"
+      }
+  }
+
+  response = requests.post(url1, json=payload1, headers=headers1)
+
+  if response.status_code == 200:
+      data = response.json()
+  else:
+      print("Error:", response.status_code, response.text)
+
+  service_id_1 = data["pipelineResponseConfig"][0]["config"][0]["serviceId"]
+  service_id_2 = data["pipelineResponseConfig"][1]["config"][0]["serviceId"]
+  callback_url = data["pipelineInferenceAPIEndPoint"]["callbackUrl"]
+  header_name = data["pipelineInferenceAPIEndPoint"]["inferenceApiKey"]["name"]
+  header_value = data["pipelineInferenceAPIEndPoint"]["inferenceApiKey"]["value"]
+
+
+  url2 = callback_url  # Replace with the actual URL
+
+    # Your API key or token for authentication, if required
+  headers2 = {
+        header_name : header_value
+  }
+
+  null = "null"
+
+
+
+  payload2 = {
+        "pipelineTasks": [
+            {
+                "taskType": "asr",
+                "config": {
+                    "language": {
+                        "sourceLanguage": input_lang
+                    },
+                    "serviceId": service_id_1,
+                    "audioFormat": "mp3",
+                    "samplingRate": 48000
+                }
+            },
+            {
+                "taskType": "translation",
+                "config": {
+                    "language": {
+                        "sourceLanguage": input_lang,
+                        "targetLanguage": "en"
+                    },
+                    "serviceId": service_id_2
+                }
+            }
+        ],
+        "inputData": {
+            "input": [
+                {
+                    "source": null
+                }
+            ],
+            "audio": [
+                {
+                    "audioContent": input_audio_base64
+                }
+            ]
+        }
+    }
+
+  response = requests.post(url2, json=payload2, headers=headers2)
+
+  if response.status_code == 200:
+      data = response.json()
+  else:
+      print("Error : ", response.status_code, response.text)
+
+  translation_output = data["pipelineResponse"][1]["output"][0]["target"]
+  print(translation_output)
+  return translation_output
+
+
+
+def english_to_indic_voice(output_lang, input_text):
+
+  url1 = "https://meity-auth.ulcacontrib.org/ulca/apis/v0/model/getModelsPipeline"
+
+  headers1 = {
+      "Content-Type": "application/json",
+      "ulcaApiKey": "3653475f10-336b-4d31-b3d3-713cf1b0d48a",
+      "userID": "1930b643ca2d4589b2bf9157cb2d7f3d"
+  }
+
+  payload1 = {
+      "pipelineTasks": [{
+          "taskType": "translation",
+          "config": {
+              "language": {
+                  "sourceLanguage": "en",
+                  "targetLanguage": output_lang
+                  }
+          }
+      },
+      {
+          "taskType": "tts",
+          "config": {
+                  "language": {
+                      "sourceLanguage": output_lang
+                  }
+              }
+      }],
+
+      "pipelineRequestConfig": {
+          "pipelineId": "64392f96daac500b55c543cd"
+      }
+  }
+
+
+
+  response = requests.post(url1, json=payload1, headers=headers1)
+
+  if response.status_code == 200:
+      data = response.json()
+      # print(data)
+  else:
+      print("Error:", response.status_code, response.text)
+
+
+  service_id_1 = data["pipelineResponseConfig"][0]["config"][0]["serviceId"]
+  service_id_2 = data["pipelineResponseConfig"][1]["config"][0]["serviceId"]
+
+  callback_url = data["pipelineInferenceAPIEndPoint"]["callbackUrl"]
+
+  header_name = data["pipelineInferenceAPIEndPoint"]["inferenceApiKey"]["name"]
+  header_value = data["pipelineInferenceAPIEndPoint"]["inferenceApiKey"]["value"]
+
+  url2 = callback_url
+
+  headers2 = { 
+      header_name : header_value
+  }
+  null = "null"
+
+  payload2 = {
+      "pipelineTasks": [
+          {
+              "taskType": "translation",
+              "config": {
+                  "language": {
+                      "sourceLanguage": "en",
+                      "targetLanguage": output_lang
+                  },
+                  "serviceId": service_id_1
+              }
+          },
+          {
+              "taskType": "tts",
+              "config": {
+                  "language": {
+                      "sourceLanguage": output_lang
+                  },
+                  "serviceId": service_id_2,
+                  "gender": "male"
+              }
+          }
+      ],
+      "inputData": {
+          "input": [
+              {
+                  "source": input_text
+              }
+          ],
+          "audio": [
+              {
+                  "audioContent": null
+              }
+          ]
+      }
+  }
+
+  response = requests.post(url2, json=payload2, headers=headers2)
+
+  if response.status_code == 200:
+      data = response.json()
+      # print(data)
+  else:
+      print("Error:", response.status_code, response.text)
+
+  return data['pipelineResponse'][1]['audio'][0]['audioContent']
+
+
+
