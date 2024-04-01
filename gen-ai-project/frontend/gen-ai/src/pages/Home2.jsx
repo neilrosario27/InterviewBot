@@ -7,10 +7,10 @@ function Home2() {
       <div id="hero" className="pt-5 lg:flex items-center justify-between">
         <div className="lg:w-1/2 px-5 sm:px-10 md:px-10 lg:px-20">
           <h1 className="text-6xl xl:text-7xl font-black">
-           talk to your pdfs
+           talk with AI assistant
           </h1>
           <p className="mt-4 mx-auto">
-            <Link to="/main"><button className='btn-default'>GO HERE</button></Link>
+            <Link to="/premain"><button className='btn-default'>GO HERE</button></Link>
           </p>
           
         </div>

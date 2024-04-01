@@ -81,6 +81,120 @@ const Dropdown = ({ setSelectedLanguageMain }) => {
           >
             Tamil
           </a>
+          <a
+            onClick={() => handleLanguageSelect("Gom")}
+            className="block px-4 py-2 text-gray-800 hover:bg-indigo-500 hover:text-white cursor-pointer"
+          >
+            Gom
+          </a>
+          <a
+            onClick={() => handleLanguageSelect("Kannada")}
+            className="block px-4 py-2 text-gray-800 hover:bg-indigo-500 hover:text-white cursor-pointer"
+          >
+            Kannada
+          </a>
+          <a
+            onClick={() => handleLanguageSelect("Dogri")}
+            className="block px-4 py-2 text-gray-800 hover:bg-indigo-500 hover:text-white cursor-pointer"
+          >
+            Dogri
+          </a>
+          <a
+            onClick={() => handleLanguageSelect("Bodo")}
+            className="block px-4 py-2 text-gray-800 hover:bg-indigo-500 hover:text-white cursor-pointer"
+          >
+            Bodo
+          </a>
+          <a
+            onClick={() => handleLanguageSelect("Urdu")}
+            className="block px-4 py-2 text-gray-800 hover:bg-indigo-500 hover:text-white cursor-pointer"
+          >
+            Urdu
+          </a>
+          <a
+            onClick={() => handleLanguageSelect("Kashmiri")}
+            className="block px-4 py-2 text-gray-800 hover:bg-indigo-500 hover:text-white cursor-pointer"
+          >
+            Kashmiri
+          </a>
+          <a
+            onClick={() => handleLanguageSelect("Assamese")}
+            className="block px-4 py-2 text-gray-800 hover:bg-indigo-500 hover:text-white cursor-pointer"
+          >
+            Assamese
+          </a>
+          <a
+            onClick={() => handleLanguageSelect("Bengali")}
+            className="block px-4 py-2 text-gray-800 hover:bg-indigo-500 hover:text-white cursor-pointer"
+          >
+            Bengali
+          </a>
+          <a
+            onClick={() => handleLanguageSelect("Sindhi")}
+            className="block px-4 py-2 text-gray-800 hover:bg-indigo-500 hover:text-white cursor-pointer"
+          >
+            Sindhi
+          </a>
+          <a
+            onClick={() => handleLanguageSelect("Maithili")}
+            className="block px-4 py-2 text-gray-800 hover:bg-indigo-500 hover:text-white cursor-pointer"
+          >
+            Maithili
+          </a>
+          <a
+            onClick={() => handleLanguageSelect("Punjabi")}
+            className="block px-4 py-2 text-gray-800 hover:bg-indigo-500 hover:text-white cursor-pointer"
+          >
+            Punjabi
+          </a>
+          <a
+            onClick={() => handleLanguageSelect("Malayalam")}
+            className="block px-4 py-2 text-gray-800 hover:bg-indigo-500 hover:text-white cursor-pointer"
+          >
+            Malayalam
+          </a>
+          <a
+            onClick={() => handleLanguageSelect("Manipuri")}
+            className="block px-4 py-2 text-gray-800 hover:bg-indigo-500 hover:text-white cursor-pointer"
+          >
+            Manipuri
+          </a>
+          <a
+            onClick={() => handleLanguageSelect("Telugy")}
+            className="block px-4 py-2 text-gray-800 hover:bg-indigo-500 hover:text-white cursor-pointer"
+          >
+            Telugu
+          </a>
+          <a
+            onClick={() => handleLanguageSelect("Sanskrit")}
+            className="block px-4 py-2 text-gray-800 hover:bg-indigo-500 hover:text-white cursor-pointer"
+          >
+            Sanskrit
+          </a>
+          <a
+            onClick={() => handleLanguageSelect("Nepali")}
+            className="block px-4 py-2 text-gray-800 hover:bg-indigo-500 hover:text-white cursor-pointer"
+          >
+            Nepali
+          </a>
+          <a
+            onClick={() => handleLanguageSelect("Santali")}
+            className="block px-4 py-2 text-gray-800 hover:bg-indigo-500 hover:text-white cursor-pointer"
+          >
+            Santali
+          </a>
+          <a
+            onClick={() => handleLanguageSelect("Gujarati")}
+            className="block px-4 py-2 text-gray-800 hover:bg-indigo-500 hover:text-white cursor-pointer"
+          >
+            Gujarati
+          </a>
+          <a
+            onClick={() => handleLanguageSelect("Odia")}
+            className="block px-4 py-2 text-gray-800 hover:bg-indigo-500 hover:text-white cursor-pointer"
+          >
+            Odia
+          </a>
         </div>
       )}
     </div>

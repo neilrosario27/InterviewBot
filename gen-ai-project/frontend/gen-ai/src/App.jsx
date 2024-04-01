@@ -23,7 +23,7 @@ const App = () => {
           <Route path="/main" element={<AuthenticatedWrapper>
                 <MainPage />
               </AuthenticatedWrapper>} />
-          <Route path="/" element={<Home2 />} />
+          <Route path="/" element={<PreMain />} />
           <Route path="/text" element={<AuthenticatedWrapper><TextPage /></AuthenticatedWrapper>} />
           <Route path="/audio" element={<AuthenticatedWrapper><AudioPage /></AuthenticatedWrapper>} />
           <Route path="/viva" element={<AuthenticatedWrapper><VivaPage /></AuthenticatedWrapper> } />

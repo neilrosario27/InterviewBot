@@ -125,12 +125,30 @@ const AudioRecorder = ({ onAudioReady, updateTextValue }) => {
                     <select
                       value={selectedLanguage}
                       onChange={(e) => setSelectedLanguage(e.target.value)}
-                      className="py-2 px-4 border border-gray-300 rounded-md bg-white focus:outline-none focus-visible:ring focus-visible:border-blue-300 transition-border-color"
-                    >
+                      className="py-2 px-4 border border-gray-300 rounded-md bg-white focus:outline-none focus-visible:ring focus-visible:border-blue-300 transition-border-color">
                       <option value="english">English</option>
                       <option value="hindi">Hindi</option>
                       <option value="marathi">Marathi</option>
                       <option value="tamil">Tamil</option>
+                      <option value="tamil">Gom</option>
+                      <option value="tamil">Kannada</option>
+                      <option value="tamil">Dogri</option>
+                      <option value="tamil">Bodo</option>
+                      <option value="tamil">Urdu</option>
+                      <option value="tamil">Kashmiri</option>
+                      <option value="tamil">Assamese</option>
+                      <option value="tamil">Bengali</option>
+                      <option value="tamil">Sindhi</option>
+                      <option value="tamil">Maithili</option>
+                      <option value="tamil">Punjabi</option>
+                      <option value="tamil">Malayalam</option>
+                      <option value="tamil">Manipuri</option>
+                      <option value="tamil">Telugu</option>
+                      <option value="tamil">Sanskrit</option>
+                      <option value="tamil">Nepali</option>
+                      <option value="tamil">Santali</option>
+                      <option value="tamil">Gujarati</option>
+                      <option value="tamil">Odia</option>
                     </select>
                   </label>
                 </div>

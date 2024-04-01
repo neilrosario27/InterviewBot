@@ -12,7 +12,7 @@ const AuthenticatedWrapper = ({ children }) => {
 
   if (!isAuthenticated) {
     // Redirect unauthenticated users
-    return <Navigate to="/home2" replace />;
+    return <Navigate to="/premain" replace />;
   }
 
   // If the user is authenticated, render the children
