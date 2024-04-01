@@ -57,32 +57,9 @@ async def reset_pinecone():
 
 
 
-def mp3_to_text_hindi(data):
-    client = OpenAI(api_key=OPENAI_API)
-    transcript = client.audio.transcriptions.create(
-        model="whisper-1", 
-        file=data,
-        language="hi",
-        response_format="text"
-    )
-    print(f"This is MP3 Hindi:\n\n{transcript}")
-    return transcript
-
-def english_to_hindi(english_text):
-    translated = GoogleTranslator(source='en',target='hi').translate(english_text)
-    print(f"This is english to hindi:\n\n{translated}")
-    return translated
 
 
-def hindi_text_to_mp3(text):
-    print("generating audio")
-    language = 'hi'
-    speed = False
-    tts = gTTS(text=text, lang=language, slow=speed)
-    with NamedTemporaryFile(delete=False) as tmp:
-        tts.save(tmp.name)
-        tmp_path = tmp.name
-    return tmp_path
+
 
 def mp3_to_text_english(data):
     client = OpenAI(api_key=OPENAI_API)
@@ -108,54 +85,22 @@ def english_text_to_mp3(text):
     return tmp_path
 
 
-def mp3_to_text_marathi(data):
+
+
+def mp3_to_text(input_lang, data):
     client = OpenAI(api_key=OPENAI_API)
     transcript = client.audio.transcriptions.create(
         model="whisper-1", 
         file=data,
-        language="mr",
+        language=input_lang,
         response_format="text"
     )
-    print(f"This is MP3 Marathi:\n\n{transcript}")
+    print(f"This is MP3 :\n\n{transcript}")
     return transcript
 
-
-def english_to_marathi(english_text):
-    translated = GoogleTranslator(source='en',target='mr').translate(english_text)
-    print(f"This is English text to Marathi:\n\n{translated}")
-    return translated
-
-
-def marathi_text_to_mp3(text):
+def text_to_mp3(input_lang, text):
     print("generating audio")
-    language = 'mr'
-    speed = False
-    tts = gTTS(text=text, lang=language, slow=speed)
-    with NamedTemporaryFile(delete=False) as tmp:
-        tts.save(tmp.name)
-        tmp_path = tmp.name
-    return tmp_path
-
-def mp3_to_text_tamil(data):
-    client = OpenAI(api_key=OPENAI_API)
-    transcript = client.audio.transcriptions.create(
-        model="whisper-1", 
-        file=data,
-        language="ta",
-        response_format="text"
-    )
-    print(f"This is MP3 Tamil:\n\n{transcript}")
-    return transcript
-
-def english_to_tamil(english_text):
-    translated = GoogleTranslator(source='en',target='ta').translate(english_text)
-    print(f"This is english to tamil:\n\n{translated}")
-    return translated
-
-
-def tamil_text_to_mp3(text):
-    print("generating audio")
-    language = 'ta'
+    language = input_lang
     speed = False
     tts = gTTS(text=text, lang=language, slow=speed)
     with NamedTemporaryFile(delete=False) as tmp:
@@ -164,22 +109,6 @@ def tamil_text_to_mp3(text):
     return tmp_path
 
 
-def hindi_to_english(english_text):
-    translated = GoogleTranslator(source='hi',target='en').translate(english_text)
-    print(f"This is hindi to english:\n\n{translated}")
-    return translated
-
-
-def marathi_to_english(english_text):
-    translated = GoogleTranslator(source='mr',target='en').translate(english_text)
-    print(f"This is Marathi to english:\n\n{translated}")
-    return translated  
-
-
-def tamil_to_english(english_text):
-    translated = GoogleTranslator(source='ta',target='en').translate(english_text)
-    print(f"This is tamil to english:\n\n{translated}")
-    return translated  
 
 
 @app.post("/getaudio/")
@@ -190,58 +119,79 @@ async def get_audio(language: str = Form(...), audio: UploadFile = File(...)):
             buffer.write(audio.file.read())
         audio_input = open(audio.filename,"rb")
 
-        
-
+       
         if language == 'hindi':
-
-            # input_lang = "hi"
-            # print("base64 :" ,base64_input)
-            # query = indic_to_english_voice(input_lang, base64_input)
-            # print(query)
-            # answer_eng = starting_point(query)
-            # # print(answer_eng)
-            # base64_output = english_to_indic_voice(input_lang, answer_eng)
-            # final_output = convert_to_mp3(base64_output)
-
-
-            input_lang = "hi"
-
-            stt_hin = mp3_to_text_hindi(audio_input)
-            tt_hin_eng = indic_to_english_text(input_lang, stt_hin)
-            text_query_pdf = starting_point(tt_hin_eng)
-            tt_eng_hin = english_to_indic_text(input_lang, text_query_pdf)
-            tts_hin = hindi_text_to_mp3(tt_eng_hin)    
+            input_lang="hi"
+            sst_ind = mp3_to_text(input_lang, audio_input)
+            tt_eng = indic_to_english_text(input_lang, sst_ind)
+            text_query_pdf = starting_point(tt_eng)
+            tt_ind = english_to_indic_text(input_lang, text_query_pdf)
+            tts_ind = text_to_mp3(input_lang, tt_ind)
             def iterfile():
-                with open(tts_hin, "rb") as audio_file:
+                with open(tts_ind, "rb") as audio_file:
                     yield from audio_file
-                os.remove(tts_hin)
+                os.remove(tts_ind)
             return StreamingResponse(iterfile(),media_type="application/octet-stream")
         elif language == 'marathi':
-
-            input_lang = "mr"
-            stt_mar = mp3_to_text_marathi(audio_input)
-            tt_mar_eng = indic_to_english_text(input_lang, stt_mar)
-            text_query_pdf = starting_point(tt_mar_eng)
-            tt_eng_mar = english_to_indic_text(input_lang, text_query_pdf)
-            tts_mar = marathi_text_to_mp3(tt_eng_mar)
+            input_lang="mr"
+            sst_ind = mp3_to_text(input_lang, audio_input)
+            tt_eng = indic_to_english_text(input_lang, sst_ind)
+            text_query_pdf = starting_point(tt_eng)
+            tt_ind = english_to_indic_text(input_lang, text_query_pdf)
+            tts_ind = text_to_mp3(input_lang, tt_ind)
             def iterfile():
-                with open(tts_mar, "rb") as audio_file:
+                with open(tts_ind, "rb") as audio_file:
                     yield from audio_file
-                os.remove(tts_mar)
+                os.remove(tts_ind)
             return StreamingResponse(iterfile(),media_type="application/octet-stream")
         elif language == 'tamil':
-
             input_lang="ta"
-            stt_tam = mp3_to_text_tamil(audio_input)
-            tt_tam_eng = indic_to_english_text(input_lang, stt_tam)
-            text_query_pdf = starting_point(tt_tam_eng)
-            tt_eng_tam = english_to_indic_text(input_lang, text_query_pdf)
-            tts_tam = tamil_text_to_mp3(tt_eng_tam)
+            sst_ind = mp3_to_text(input_lang, audio_input)
+            tt_eng = indic_to_english_text(input_lang, sst_ind)
+            text_query_pdf = starting_point(tt_eng)
+            tt_ind = english_to_indic_text(input_lang, text_query_pdf)
+            tts_ind = text_to_mp3(input_lang, tt_ind)
             def iterfile():
-                with open(tts_tam, "rb") as audio_file:
+                with open(tts_ind, "rb") as audio_file:
                     yield from audio_file
-                os.remove(tts_tam)
+                os.remove(tts_ind)
             return StreamingResponse(iterfile(),media_type="application/octet-stream")
+        elif language == 'Kannada':
+            input_lang="kn"
+            sst_ind = mp3_to_text(input_lang, audio_input)
+            tt_eng = indic_to_english_text(input_lang, sst_ind)
+            text_query_pdf = starting_point(tt_eng)
+            tt_ind = english_to_indic_text(input_lang, text_query_pdf)
+            tts_ind = text_to_mp3(input_lang, tt_ind)
+            def iterfile():
+                with open(tts_ind, "rb") as audio_file:
+                    yield from audio_file
+                os.remove(tts_ind)
+            return StreamingResponse(iterfile(),media_type="application/octet-stream")
+        elif language == 'Urdu':
+            input_lang="ur"
+            sst_ind = mp3_to_text(input_lang, audio_input)
+            tt_eng = indic_to_english_text(input_lang, sst_ind)
+            text_query_pdf = starting_point(tt_eng)
+            tt_ind = english_to_indic_text(input_lang, text_query_pdf)
+            tts_ind = text_to_mp3(input_lang, tt_ind)
+            def iterfile():
+                with open(tts_ind, "rb") as audio_file:
+                    yield from audio_file
+                os.remove(tts_ind)
+            return StreamingResponse(iterfile(),media_type="application/octet-stream")
+        elif language == 'Nepali':
+            input_lang="ne"
+            sst_ind = mp3_to_text(input_lang, audio_input)
+            tt_eng = indic_to_english_text(input_lang, sst_ind)
+            text_query_pdf = starting_point(tt_eng)
+            tt_ind = english_to_indic_text(input_lang, text_query_pdf)
+            tts_ind = text_to_mp3(input_lang, tt_ind)
+            def iterfile():
+                with open(tts_ind, "rb") as audio_file:
+                    yield from audio_file
+                os.remove(tts_ind)
+            return StreamingResponse(iterfile(),media_type="application/octet-stream")  
         else:
             stt_eng = mp3_to_text_english(audio_input)
             text_query_pdf = starting_point(stt_eng)
