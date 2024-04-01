@@ -466,10 +466,6 @@ def english_to_indic_text(input_lang, input_text):
     output_text = translated_text['pipelineResponse'][0]['output'][0]['target']
     return output_text
 
-            
-
-
-
 
 
 
@@ -693,3 +689,6 @@ def english_to_indic_voice(output_lang, input_text):
 
 
 
+=======
+                  
+>>>>>>> Stashed changes

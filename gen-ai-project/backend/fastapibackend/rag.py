@@ -33,8 +33,13 @@ chat = ChatOpenAI(
 
 
 message = [
-    SystemMessage(content="""You are an educational chatbot. You have to answer the responses based on the contexts that will be provided to you. 
-                  If the context doesn't have the answer reply 'The context provided doesn't have answer to this.' Do not make up your own answer."""),
+    # SystemMessage(content="""You are an ai assistant chatbot for ecommerce. You have to answer the responses based on the contexts that will be provided to you. 
+    #               If the context doesn't have the answer reply 'I am sorry, I do not have the relevant information.' Do not make up your own answer."""),
+    # HumanMessage(content="Hi AI, how are you today?"),
+    # AIMessage(content="I'm great thank you. How can I help you?")
+    SystemMessage(content="""You are an AI assistant chatbot for ecommerce. You have to answer the responses based on the contexts that will be provided to you. 
+                  If the context doesn't have the answer reply 'I am sorry, I do not have the relevant information.' Do not make up your own answer.
+                  Additionally, you should analyze the sentiment of the user's message and respond accordingly. If the user seems angry, console them; if they seem sad, try to cheer them up before answering their query."""),
     HumanMessage(content="Hi AI, how are you today?"),
     AIMessage(content="I'm great thank you. How can I help you?")
 ]
