@@ -83,7 +83,8 @@ def process_pinecone():
 
 
 
-def augment_prompt(query):
+def augment_prompt(query, emotion):
+
     if len(message)>2:
         results = vectorstore.similarity_search(str(message[-1])+'\n'+query,k=3)
     else:
@@ -92,6 +93,9 @@ def augment_prompt(query):
 
     augemented_prompt = f"""Using the contexts below, answer the query. Also you are provided with previous conversations of the 
     system with the user. Refer to this conversation and understand what the user is asking for making you a conversational bot.
+
+    Emotion:
+    {emotion}
 
     Context:
     {source_knowledge}
@@ -102,9 +106,9 @@ def augment_prompt(query):
 
 
 
-def starting_point(question):
+def starting_point(question, emotion):
     prompt = HumanMessage(
-        content = augment_prompt(question)
+        content = augment_prompt(question, emotion)
         )
     message.append(prompt)
     res = chat(message[-4:])
@@ -116,56 +120,7 @@ def reset_the_pinecone():
     pinecone.create_index(name="chatbook", dimension=1536, metric='cosine')
 
 
-def get_summary(question):
-    docs = vectorstore.similarity_search(question)
-    client = OpenAI(api_key=OPENAI_API_KEY)
-    sumary = client.chat.completions.create(
-        model="gpt-3.5-turbo",
-        messages=[
-            {"role":"system","content":"""You are a helpful educational assistant.
-            You would need to generate a concise summary on the context provided to you. Include the following in the summary and generate response in this format only:
-            1. Introduction\n, 2. Key Concepts and Theoires\n, 3. Methodology\n, 4. Findings or Main Points\n, 5. Implications or Application\n, 6. Conclusion\n """},
-            {"role":"user","content":f"{docs}\n Generate the summary of the above"}
-        ]
-    )
-    return (sumary.choices[0].message.content)
-
-def get_viva(question):
-    docs = vectorstore.similarity_search(question)
-    client = OpenAI(api_key=OPENAI_API_KEY)
-    viva = client.chat.completions.create(
-        model="gpt-3.5-turbo",
-        messages=[
-            {"role":"system","content":"""You are a helpful educational assistant.
-            You would need to generate viva questions and their answers on the context provided to you. Cover all the important points and generate as many questions as possible. The format of the query should be:\n 
-            Question:\n Answer:\n For Example of format:\nQuestion:What is cloud computing?\nAnswer:Cloud computing is the on-demand availability of computer system resources, especially data storage (cloud storage) and computing power, without direct active management by the user. Large clouds often have functions distributed over multiple locations, each of which is a data center. Cloud computing relies on sharing of resources to achieve coherence and typically uses a pay-as-you-go model, which can help in reducing capital expenses but may also lead to unexpected operating expenses for users"""},
-            {"role":"user","content":f"{docs}\n Generate the viva questions from the above"}
-        ]
-    )
-    return (viva.choices[0].message.content)
-
-def get_mcq(topic, number):
-    docs = vectorstore.similarity_search(topic)
-    client = OpenAI(api_key=OPENAI_API_KEY)
-    questions = []
-    for i in range(0, number, 1):
-        response = client.chat.completions.create(
-        model="gpt-3.5-turbo-0125",
-        response_format={ "type": "json_object" },
-        messages=[
-            {"role": "system", "content": "You are a helpful assistant designed to output JSON."},
-            {"role": "system", "content": "Always follow this format (questions : Question generated, answer : correct answer, option1: wrong option , option2 : wrong option, option3: wrong options).\n"},
-            {"role": "user", "content": f"{docs}\n Generate one mcq questions from the above context. Don't repeat these questions: \n{questions}\n Keep in mind that the generated options should not be more than 15 words. The difficulty of questions hould be moderate."}
-        ]
-        )
-        questions.append(response.choices[0].message.content)  
-    print(questions)
-    json_responses = [json.loads(response) for response in questions]
-    fin2 = json.dumps(json_responses, indent=4)
-    parsed_json = json.loads(fin2)
-    minimized_json_string = json.dumps(parsed_json, separators=(',', ':'))
-    print(minimized_json_string)
-    return minimized_json_string                 
+               
 
 def process_pinecone_url(url):
     loader = WebBaseLoader(url)

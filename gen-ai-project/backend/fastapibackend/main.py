@@ -14,6 +14,8 @@ import requests
 import base64
 from pydub import AudioSegment
 import shutil
+from transformers import pipeline
+
 
 load_dotenv()
 
@@ -58,31 +60,16 @@ async def reset_pinecone():
 
 
 
+def sentimemt(text):
+    classifier = pipeline(task="text-classification", model="SamLowe/roberta-base-go_emotions", top_k=None)
+    sentences = [text]
+
+    model_outputs = classifier(sentences)
+    print ("emotion", model_outputs[0][0]['label'])
+    return model_outputs[0][0]['label']
 
 
 
-def mp3_to_text_english(data):
-    client = OpenAI(api_key=OPENAI_API)
-    transcript = client.audio.transcriptions.create(
-        model="whisper-1", 
-        file=data,
-        language="en",
-        response_format="text"
-    )
-    print(f"This is MP3 English:\n\n{transcript}")
-    return transcript
-
-
-
-def english_text_to_mp3(text):
-    print("generating audio")
-    language = 'en'
-    speed = False
-    tts = gTTS(text=text, lang=language, slow=speed)
-    with NamedTemporaryFile(delete=False) as tmp:
-        tts.save(tmp.name)
-        tmp_path = tmp.name
-    return tmp_path
 
 
 
@@ -98,35 +85,55 @@ def mp3_to_text(input_lang, data):
     print(f"This is MP3 :\n\n{transcript}")
     return transcript
 
-def text_to_mp3(input_lang, text):
+
+
+
+def base64_to_mp3(base64_string):
     print("generating audio")
-    language = input_lang
-    speed = False
-    tts = gTTS(text=text, lang=language, slow=speed)
-    with NamedTemporaryFile(delete=False) as tmp:
-        tts.save(tmp.name)
+    decoded_data = base64.b64decode(base64_string)
+    with NamedTemporaryFile(suffix=".mp3", delete=False) as tmp:
+        tmp.write(decoded_data)
         tmp_path = tmp.name
     return tmp_path
-
 
 
 
 @app.post("/getaudio/")
 async def get_audio(language: str = Form(...), audio: UploadFile = File(...)):
     try:
+
         # Save the uploaded audio file
         with open(audio.filename, "wb") as buffer:
             buffer.write(audio.file.read())
         audio_input = open(audio.filename,"rb")
+        print(audio.filename)
 
+
+        # mp3_data = await audio.read()
+        # base64_encoded_data = base64.b64encode(mp3_data).decode('utf-8')
        
         if language == 'hindi':
+            # input_lang = "hi"
+            # sst_ind = await asr2(input_lang, base64_encoded_data)   # audio to indic text
+            # print("sst_ind", sst_ind)
+            # tt_eng = indic_to_english_text(input_lang, sst_ind)    # indic text to eng text
+            # print(tt_eng)
+            # emotion = sentimemt(tt_eng)
+            # text_query_pdf = starting_point(tt_eng, emotion)  # query
+            # print(text_query_pdf)
+            # tt_ind = english_to_indic_text(input_lang, text_query_pdf)  # eng reply to indic text
+            # print(tt_ind)
+            # tts_b64 = tts(input_lang, tt_ind)
+            # tts_ind = base64_to_mp3(tts_b64)    #indic text to voice
+
             input_lang="hi"
             sst_ind = mp3_to_text(input_lang, audio_input)
             tt_eng = indic_to_english_text(input_lang, sst_ind)
-            text_query_pdf = starting_point(tt_eng)
+            emotion = sentimemt(tt_eng)
+            text_query_pdf = starting_point(tt_eng, emotion)
             tt_ind = english_to_indic_text(input_lang, text_query_pdf)
-            tts_ind = text_to_mp3(input_lang, tt_ind)
+            tts_b64 = tts(input_lang, tt_ind)
+            tts_ind = base64_to_mp3(tts_b64)
             def iterfile():
                 with open(tts_ind, "rb") as audio_file:
                     yield from audio_file
@@ -136,9 +143,11 @@ async def get_audio(language: str = Form(...), audio: UploadFile = File(...)):
             input_lang="mr"
             sst_ind = mp3_to_text(input_lang, audio_input)
             tt_eng = indic_to_english_text(input_lang, sst_ind)
-            text_query_pdf = starting_point(tt_eng)
+            emotion = sentimemt(tt_eng)
+            text_query_pdf = starting_point(tt_eng, emotion)
             tt_ind = english_to_indic_text(input_lang, text_query_pdf)
-            tts_ind = text_to_mp3(input_lang, tt_ind)
+            tts_b64 = tts(input_lang, tt_ind)
+            tts_ind = base64_to_mp3(tts_b64)
             def iterfile():
                 with open(tts_ind, "rb") as audio_file:
                     yield from audio_file
@@ -148,9 +157,11 @@ async def get_audio(language: str = Form(...), audio: UploadFile = File(...)):
             input_lang="ta"
             sst_ind = mp3_to_text(input_lang, audio_input)
             tt_eng = indic_to_english_text(input_lang, sst_ind)
-            text_query_pdf = starting_point(tt_eng)
+            emotion = sentimemt(tt_eng)
+            text_query_pdf = starting_point(tt_eng, emotion)
             tt_ind = english_to_indic_text(input_lang, text_query_pdf)
-            tts_ind = text_to_mp3(input_lang, tt_ind)
+            tts_b64 = tts(input_lang, tt_ind)
+            tts_ind = base64_to_mp3(tts_b64)
             def iterfile():
                 with open(tts_ind, "rb") as audio_file:
                     yield from audio_file
@@ -160,9 +171,11 @@ async def get_audio(language: str = Form(...), audio: UploadFile = File(...)):
             input_lang="kn"
             sst_ind = mp3_to_text(input_lang, audio_input)
             tt_eng = indic_to_english_text(input_lang, sst_ind)
-            text_query_pdf = starting_point(tt_eng)
+            emotion = sentimemt(tt_eng)
+            text_query_pdf = starting_point(tt_eng, emotion)
             tt_ind = english_to_indic_text(input_lang, text_query_pdf)
-            tts_ind = text_to_mp3(input_lang, tt_ind)
+            tts_b64 = tts(input_lang, tt_ind)
+            tts_ind = base64_to_mp3(tts_b64)
             def iterfile():
                 with open(tts_ind, "rb") as audio_file:
                     yield from audio_file
@@ -172,9 +185,11 @@ async def get_audio(language: str = Form(...), audio: UploadFile = File(...)):
             input_lang="ur"
             sst_ind = mp3_to_text(input_lang, audio_input)
             tt_eng = indic_to_english_text(input_lang, sst_ind)
-            text_query_pdf = starting_point(tt_eng)
+            emotion = sentimemt(tt_eng)
+            text_query_pdf = starting_point(tt_eng, emotion)
             tt_ind = english_to_indic_text(input_lang, text_query_pdf)
-            tts_ind = text_to_mp3(input_lang, tt_ind)
+            tts_b64 = tts(input_lang, tt_ind)
+            tts_ind = base64_to_mp3(tts_b64)
             def iterfile():
                 with open(tts_ind, "rb") as audio_file:
                     yield from audio_file
@@ -184,24 +199,27 @@ async def get_audio(language: str = Form(...), audio: UploadFile = File(...)):
             input_lang="ne"
             sst_ind = mp3_to_text(input_lang, audio_input)
             tt_eng = indic_to_english_text(input_lang, sst_ind)
-            text_query_pdf = starting_point(tt_eng)
+            emotion = sentimemt(tt_eng)
+            text_query_pdf = starting_point(tt_eng, emotion)
             tt_ind = english_to_indic_text(input_lang, text_query_pdf)
-            tts_ind = text_to_mp3(input_lang, tt_ind)
+            tts_b64 = tts(input_lang, tt_ind)
+            tts_ind = base64_to_mp3(tts_b64)
             def iterfile():
                 with open(tts_ind, "rb") as audio_file:
                     yield from audio_file
                 os.remove(tts_ind)
             return StreamingResponse(iterfile(),media_type="application/octet-stream")  
         else:
-            stt_eng = mp3_to_text_english(audio_input)
-            text_query_pdf = starting_point(stt_eng)
-            tts_eng = english_text_to_mp3(text_query_pdf)
-            print("english_output")
-            print(  type(tts_eng))
+            input_lang = "en"
+            sst_ind = mp3_to_text(input_lang, audio_input)
+            emotion = sentimemt(sst_ind)
+            text_query_pdf = starting_point(sst_ind,  emotion)
+            tts_b64 = tts(input_lang, text_query_pdf)
+            tts_ind = base64_to_mp3(tts_b64)
             def iterfile():
-                with open(tts_eng, "rb") as audio_file:
+                with open(tts_ind, "rb") as audio_file:
                     yield from audio_file
-                os.remove(tts_eng)
+                os.remove(tts_ind)
             return StreamingResponse(iterfile(),media_type="application/octet-stream")
 
     except Exception as e:
@@ -362,7 +380,7 @@ def indic_to_english_text(input_lang, input_text):
 
     headers1 = {
         "Content-Type": "application/json",
-        "ulcaApiKey": "3653475f10-336b-4d31-b3d3-713cf1b0d48a",
+        "ulcaApiKey": "167642c261-1283-4816-9309-9767b0a1ea26",
         "userID": "1930b643ca2d4589b2bf9157cb2d7f3d"
     }
 
@@ -435,7 +453,6 @@ def indic_to_english_text(input_lang, input_text):
 
     if response.status_code == 200:
         translated_text = response.json()
-        # print("Translated text:", translated_text)
     else:
         print("Error:", response.status_code, response.text)
 
@@ -448,7 +465,7 @@ def english_to_indic_text(input_lang, input_text):
 
     headers1 = {
         "Content-Type": "application/json",
-        "ulcaApiKey": "3653475f10-336b-4d31-b3d3-713cf1b0d48a",
+        "ulcaApiKey": "167642c261-1283-4816-9309-9767b0a1ea26",
         "userID": "1930b643ca2d4589b2bf9157cb2d7f3d"
     }
 
@@ -520,13 +537,12 @@ def english_to_indic_text(input_lang, input_text):
     response = requests.post(url2, json=payload2, headers=headers2)
 
     if response.status_code == 200:
-        translated_text = response.json()
-        # print("Translated text:", translated_text)
+        translated = response.json()
     else:
         print("Error:", response.status_code, response.text)
 
 
-    output_text = translated_text['pipelineResponse'][0]['output'][0]['target']
+    output_text = translated['pipelineResponse'][0]['output'][0]['target']
     return output_text
 
 
@@ -537,7 +553,7 @@ def indic_to_english_voice(input_lang, input_audio_base64):
 
   headers1 = {
       "Content-Type": "application/json",
-      "ulcaApiKey": "3653475f10-336b-4d31-b3d3-713cf1b0d48a",
+      "ulcaApiKey": "167642c261-1283-4816-9309-9767b0a1ea26",
       "userID": "1930b643ca2d4589b2bf9157cb2d7f3d"
   }
 
@@ -649,7 +665,7 @@ def english_to_indic_voice(output_lang, input_text):
 
   headers1 = {
       "Content-Type": "application/json",
-      "ulcaApiKey": "3653475f10-336b-4d31-b3d3-713cf1b0d48a",
+      "ulcaApiKey": "167642c261-1283-4816-9309-9767b0a1ea26",
       "userID": "1930b643ca2d4589b2bf9157cb2d7f3d"
   }
 
@@ -750,3 +766,267 @@ def english_to_indic_voice(output_lang, input_text):
 
   return data['pipelineResponse'][1]['audio'][0]['audioContent']
 
+
+
+async def asr(input_lang, base64_input):
+
+    url_config = "https://meity-auth.ulcacontrib.org/ulca/apis/v0/model/getModelsPipeline"
+
+    headers_config = {
+        "Content-Type": "application/json",
+        "ulcaApiKey": "167642c261-1283-4816-9309-9767b0a1ea26",
+        "userID": "1930b643ca2d4589b2bf9157cb2d7f3d"
+    }
+
+    payload_config = {
+        "pipelineTasks": [
+            {
+                "taskType": "asr",
+                "config": {
+                    "language": {
+                        "sourceLanguage": input_lang
+                    }
+                }
+            }],
+
+
+        "pipelineRequestConfig": {
+            "pipelineId": "64392f96daac500b55c543cd"
+        }
+    }
+
+
+    response = requests.post(url_config, json=payload_config, headers=headers_config)
+
+    if response.status_code == 200:
+        response_data = response.json()
+    else:
+        print("Error asr1:", response.status_code, response.text)
+
+
+    compute_url = response_data['pipelineInferenceAPIEndPoint']['callbackUrl']
+    header_name = response_data['pipelineInferenceAPIEndPoint']['inferenceApiKey']['name']
+    header_value = response_data['pipelineInferenceAPIEndPoint']['inferenceApiKey']['value']
+    payload_serviceID = response_data['pipelineResponseConfig'][0]['config'][0]['serviceId']
+    payload_modelId = response_data['pipelineResponseConfig'][0]['config'][0]['modelId']
+
+
+    url_compute = compute_url
+    null = "null"
+
+    headers_compute = {
+        header_name : header_value
+    }
+
+
+
+    payload_compute = {
+        "pipelineTasks": [
+            {
+                "taskType": "asr",
+                "config": {
+                    "language": {
+                        "sourceLanguage": input_lang
+                    },
+                    "serviceId": payload_serviceID,
+                    "audioFormat": "wav",
+                    "samplingRate": 48000
+                }
+            }
+        ],
+        "inputData": {
+            "input": [
+                {
+                    "source": null
+                }
+            ],
+            "audio": [
+                {
+                    "audioContent": base64_input
+                }
+            ]
+        }
+    }
+
+    response = requests.post(url_compute, json=payload_compute, headers=headers_compute)
+    
+    if response.status_code == 200:
+        ans = response.json()
+        # print("Translated text:", asr)
+    else:
+        print("Error asr2:", response.status_code, response.text)
+
+
+    asr_output = ans['pipelineResponse'][0]['output'][0]['source']
+
+    return asr_output
+
+
+def tts(input_lang, text_input):
+    url_config = "https://meity-auth.ulcacontrib.org/ulca/apis/v0/model/getModelsPipeline"
+
+    headers_config = {
+        "Content-Type": "application/json",
+        "ulcaApiKey": "167642c261-1283-4816-9309-9767b0a1ea26",
+        "userID": "1930b643ca2d4589b2bf9157cb2d7f3d"
+    }
+
+    payload_config = {
+        "pipelineTasks": [{
+            "taskType": "tts",
+            "config": {
+                    "language": {
+                        "sourceLanguage": input_lang
+                    }
+                }
+        }],
+
+
+        "pipelineRequestConfig": {
+            "pipelineId": "64392f96daac500b55c543cd"
+        }
+    }
+
+    # Making the POST request to the API
+    response = requests.post(url_config, json=payload_config, headers=headers_config)
+
+    response_data = ""
+    if response.status_code == 200:
+        # Parsing the response JSON
+        response_data = response.json()
+    else:
+        print("Error tts1:", response.status_code, response.text)
+
+    #  used in compute call (? next step)
+
+    compute_url = response_data['pipelineInferenceAPIEndPoint']['callbackUrl']
+    header_name = response_data['pipelineInferenceAPIEndPoint']['inferenceApiKey']['name']
+    header_value = response_data['pipelineInferenceAPIEndPoint']['inferenceApiKey']['value']
+    payload_serviceID = response_data['pipelineResponseConfig'][0]['config'][0]['serviceId']
+    payload_modelId = response_data['pipelineResponseConfig'][0]['config'][0]['modelId']
+
+    url_compute = compute_url  # Replace with the actual URL
+
+    gender_input = "male"
+
+    # Your API key or token for authentication, if required
+    headers_compute = {
+        header_name : header_value
+    }
+
+
+    payload_compute = {
+        "pipelineTasks": [
+            {
+                "taskType": "tts",
+                "config": {
+                    "language": {
+                        "sourceLanguage": input_lang
+                    },
+                    "serviceId": payload_serviceID,
+                    "gender": gender_input
+                }
+            }
+        ],
+        "inputData": {
+            "input": [
+                {
+                    "source": text_input
+                }
+            ]
+        }
+    }
+
+    # Making the POST request to the API
+    response = requests.post(url_compute, json=payload_compute, headers=headers_compute)
+
+    # Checking if the request was successful
+    if response.status_code == 200:
+        # Parsing the response JSON
+        response_data = response.json()
+    else:
+        print("Error tts2:", response.status_code, response.text)
+
+    base64_mp3_data = response_data['pipelineResponse'][0]['audio'][0]['audioContent']
+
+    return base64_mp3_data
+
+
+async def asr2(source_language, content):
+    headers = {
+        "Content-Type": "application/json",
+        "ulcaApiKey": "167642c261-1283-4816-9309-9767b0a1ea26",
+        "userID": "1930b643ca2d4589b2bf9157cb2d7f3d"
+    }
+    payload = {
+        "pipelineTasks": [
+            {
+                "taskType": "asr",
+                "config": {
+                    "language": {
+                        "sourceLanguage": source_language
+                    }
+                }
+            }
+        ],
+        "pipelineRequestConfig": {
+            "pipelineId" : "64392f96daac500b55c543cd"
+        }
+    }
+    
+    response = requests.post('https://meity-auth.ulcacontrib.org/ulca/apis/v0/model/getModelsPipeline', json=payload, headers=headers)
+    
+    if response.status_code == 200:
+        response_data = response.json()
+        service_id = response_data["pipelineResponseConfig"][0]["config"][0]["serviceId"]
+
+        compute_payload = {
+            "pipelineTasks": [
+                {
+                    "taskType": "asr",
+                    "config": {
+                        "language": {
+                            "sourceLanguage": source_language,
+                        },
+                        "serviceId": service_id
+                    }
+                }
+            ],
+            "inputData": {
+                "audio": [
+                    {
+                        "audioContent": content
+                    }
+                ]
+            }
+        }
+
+        callback_url = response_data["pipelineInferenceAPIEndPoint"]["callbackUrl"]
+        
+        headers2 = {
+            response_data["pipelineInferenceAPIEndPoint"]["inferenceApiKey"]["name"]:
+            response_data["pipelineInferenceAPIEndPoint"]["inferenceApiKey"]["value"]
+        }
+
+        compute_response = requests.post(callback_url, json=compute_payload, headers=headers2)
+
+        if compute_response.status_code == 200:
+            compute_response_data = compute_response.json()
+            transcribed_content = compute_response_data["pipelineResponse"][0]["output"][0]["source"]
+            return {
+                "status_code": 200,
+                "message": "Translation successful",
+                "transcribed_content": transcribed_content
+            }
+        else:
+            return {
+                "status_code": compute_response.status_code,
+                "message": "Error in translation",
+                "transcribed_content": None
+            }
+    else:
+        return {
+            "status_code": response.status_code,
+            "message": "Error in translation request",
+            "transcribed_content": None
+        }
