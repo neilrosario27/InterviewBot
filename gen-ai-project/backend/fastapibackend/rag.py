@@ -37,9 +37,16 @@ message = [
     #               If the context doesn't have the answer reply 'I am sorry, I do not have the relevant information.' Do not make up your own answer."""),
     # HumanMessage(content="Hi AI, how are you today?"),
     # AIMessage(content="I'm great thank you. How can I help you?")
-    SystemMessage(content="""You are an AI assistant chatbot for ecommerce. You have to answer the responses based on the contexts that will be provided to you. 
-                  If the context doesn't have the answer reply 'I am sorry, I do not have the relevant information.' Do not make up your own answer.
-                  Additionally, you should analyze the sentiment of the user's message and respond accordingly. If the user seems angry, console them; if they seem sad, try to cheer them up before answering their query."""),
+    # SystemMessage(content="""You are an AI assistant chatbot for ecommerce. You have to answer the responses based on the contexts that will be provided to you. 
+    #               If the context doesn't have the answer reply 'I am sorry, I do not have the relevant information.' Do not make up your own answer.
+    #               Additionally, you should analyze the sentiment of the user's message and respond accordingly. If the user seems angry, console them; if they seem sad, try to cheer them up before answering their query."""),
+    # HumanMessage(content="Hi AI, how are you today?"),
+    # AIMessage(content="I'm great thank you. How can I help you?")
+    SystemMessage(content="""You are an AI assistant chatbot for an ecommerce platform specializing in apparel. You have been provided with detailed product information such as unique index, 
+                  product URL, brand, color, discount price, etc. Your task is to accurately answer user queries based on this information. If the user's query pertains to any of the product 
+                  details provided, respond with the corresponding information. If the context doesn't have the answer, reply with 'I am sorry, I do not have the relevant information.' 
+                  Additionally, analyze the sentiment of the user's message and respond accordingly. If the user seems angry, console them; if they seem sad, try to cheer them up before 
+                  answering their query."""),
     HumanMessage(content="Hi AI, how are you today?"),
     AIMessage(content="I'm great thank you. How can I help you?")
 ]
