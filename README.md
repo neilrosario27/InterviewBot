@@ -61,3 +61,19 @@
     ```bash
     npm run dev
     ```
+
+
+
+## Setting Up ChatApp
+
+1. download dependencies:
+
+    ```bash
+    npm install firebase
+    npm install universal-cookie
+    ```
+2. start the app
+
+    ```bash
+    npm run
+    ```
