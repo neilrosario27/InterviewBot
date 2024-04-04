@@ -13,10 +13,10 @@ const TextPage = () => {
   };
 
   return (
-    <div className="flex h-screen w-screen">
+    <div className="flex h-screen w-screen overflow-y-auto">
       
       {/* Sidebar (optional) */}
-      <div className="bg-img text-white w-64 p-4 space-y-4 flex flex-col justify-center">
+      <div className="bg-img text-white w-64 p-4 space-y-4 flex flex-col justify-center overflow-y-auto">
 
         <div className="text-xl font-semibold"><Link to="audio2">
               <div className="main-container"> {/* Apply CSS class */}
@@ -34,7 +34,7 @@ const TextPage = () => {
       </div>
       {/* Main content */}
       <div className="flex flex-col flex-1">
-        <div className="overflow-hidden p-4 space-y-4 bg-gray-100 flex-1">
+        <div className="overflow-y-auto p-4 space-y-4 bg-gray-100 flex-1">
           {chatHistory.map((chat, index) => (
             <div key={index} className="text-left space-y-2">
               <div className="inline-block bg-blue-300 rounded px-4 py-2 text-black">
