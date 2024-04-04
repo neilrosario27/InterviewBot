@@ -77,3 +77,9 @@
     ```bash
     npm run
     ```
+
+3. firebase-config
+
+    ```bash
+    add your own key!!
+    ```
