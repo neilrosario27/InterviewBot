@@ -10,10 +10,6 @@ const AuthenticatedWrapper = ({ children }) => {
     return <div>Loading...</div>; // or a loading spinner if you have one
   }
 
-  if (!isAuthenticated) {
-    // Redirect unauthenticated users
-    return <Navigate to="/premain" replace />;
-  }
 
   // If the user is authenticated, render the children
   return children;

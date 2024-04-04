@@ -17,13 +17,9 @@ const AudioPage = () => {
     <div className="bg-gray-800 text-white w-64 p-4 space-y-4">
       <div className="text-xl font-semibold">ChatGPT</div>
       <div>
-        <div className="text-gray-300 text-sm">History</div>
+        <div className="text-gray-300 text-sm">Historyfcsca</div>
   
-        <ul className="space-y-2 mt-3">
-          <li>Conversation 1</li>
-          <li>Conversation 2</li>
-          {/* <!-- More conversations --> */}
-        </ul>
+
       </div>
     </div>
     {/* Main content area */}

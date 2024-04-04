@@ -103,21 +103,21 @@ const Controller = () => {
 
           {messages.length == 0 && !isLoading && (
             <div className="flex flex-col items-center">
-              <div className="text-center font-light italic mt-10">
+              <div className="text-center font-dark text-white italic mt-10">
                 send chatbook a message...
               </div>
               <Dropdown setSelectedLanguageMain={setSelectedLanguage} />
             </div>
           )}
           {isLoading && (
-            <div className="text-center font-light italic mt-10 animate-pulse">
+            <div className="text-center text-white italic mt-10 animate-pulse">
               please wait a moment...
             </div>
           )}
         </div>
 
         {/* Recorder */}
-        <div className="fixed bottom-0 w-full py-6 border-t text-center bg-gradient-to-r from-sky-500 to-green-500">
+        <div className="fixed bottom-0 w-full py-6 border-t text-center bg-gradient-to-r from-gray-800 to-gray-950">
           <div className="flex justify-center items-center w-full">
             <RecordMessage handleStop={handleStop} />
           </div>

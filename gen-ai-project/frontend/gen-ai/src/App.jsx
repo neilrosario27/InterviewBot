@@ -13,10 +13,11 @@ import Audiopage2 from "./pages/Audiopage2";
 import Home2 from "./pages/Home2";
 import McqPage from "./pages/McqPage";
 import UrlPage from "./pages/UrlPage";
-
+import './App.css';
 const App = () => {
   return (
-    <div className="w-screen min-h-screen bg-gradient-to-r from-rose-100 to-teal-100">
+    <div className="w-screen min-h-screen bg-img">
+
     <BrowserRouter>
     <Navbar />
       <Routes>

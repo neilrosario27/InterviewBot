@@ -32,6 +32,7 @@ const TextInput = ({ updateTextValue }) => {
   };
 
   return (
+ 
     <div className="p-4 border-t border-gray-200">
       <form
         onSubmit={(e) => {

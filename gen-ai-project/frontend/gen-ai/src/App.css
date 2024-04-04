@@ -140,3 +140,10 @@ button:focus-visible {
 		background-color: #f9f9f9;
 	}
 }
+/* styles.css */
+.background {
+  background-image: url('bg.jpg');
+	width: 100%;
+  background-size: cover; /* Cover the entire container */
+  background-position: center; /* Center the image */
+}
