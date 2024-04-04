@@ -1,0 +1,40 @@
+/* PreMain.css */
+.main-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo-container {
+  text-align: center;
+}
+
+.logo-wrapper {
+  display: inline-block;
+  cursor: pointer;
+}
+
+.logo {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  transition: transform 0.3s ease-in-out;
+}
+
+.text {
+  padding: 10px;
+  font-weight: bold;
+  font-family: Arial, sans-serif;
+  font-size: 25px;
+  transition: transform 0.3s ease-in-out;
+}
+
+.logo-wrapper:hover .logo,
+.logo-wrapper:hover .text {
+  transform: scale(1.1); /* Grow on hover */
+}
+.typer{
+  font-size: 24px;
+  color: #f6f9fb;
+}
