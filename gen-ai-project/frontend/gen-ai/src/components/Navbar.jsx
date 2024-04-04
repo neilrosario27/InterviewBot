@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth0 } from "@auth0/auth0-react";
+import logo from './logg.png'
 const Navbar = () => {
   const { loginWithRedirect, logout, isAuthenticated, isLoading } = useAuth0();
   if (isLoading) {
@@ -10,7 +11,7 @@ const Navbar = () => {
 <nav className="bg-white border-gray-200 dark:bg-gray-900 sticky top-0 z-20">
   <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
   <Link to="/"><div className="flex items-center space-x-3 rtl:space-x-reverse">
-      <img src="https://flowbite.com/docs/images/logo.svg" className="h-8" alt="Flowbite Logo" />
+      <img src={logo} className="h-12" alt="Flowbite Logo" />
       <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">व्यापार Sahayak</span>
   </div>
   </Link>

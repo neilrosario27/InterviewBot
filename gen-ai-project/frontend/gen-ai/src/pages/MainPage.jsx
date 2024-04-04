@@ -19,7 +19,7 @@ const MainPage = () => {
 
   return (
     <div className="h-screen flex flex-col justify-center items-center space-y-5">
-      <h1 className="text-4xl  leading-11 italic font-bold">Query Your Pdf</h1>
+      <h1 className="text-4xl  leading-11 text-white italic font-bold">Upload your Product Dataset</h1>
       <PdfUpload onUploadStart={handleUploadStart} onUploadSuccess={handleUploadSuccess} />
       {isLoading && <div className="text-lg font-semibold">
 
