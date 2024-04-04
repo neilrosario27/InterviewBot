@@ -16,7 +16,21 @@ const TextPage = () => {
     <div className="flex h-screen w-screen overflow-y-auto">
       
       {/* Sidebar (optional) */}
-      <div className="bg-img text-white w-64 p-4 space-y-4 flex flex-col justify-center overflow-y-auto">
+      <div id='sidebar' style={{marginTop:'25%', maxHeight:'100vh', marginBottom:'25%'}} className="bg-img text-white overflow-y-auto">
+         {/* add new button idhar */}
+         <div>         <div className=""><Link to="audio2">
+              <div className="main-container"> {/* Apply CSS class */}
+      <div className="logo-container">
+        <Link to="localhost:3000">
+          <div className="logo-wrapper bg-white rounded-lg" style={{}}>
+            <img src={mic} alt="Your Image" className="logo height" style={{height:"100px", width:"100px", alignSelf:"center"}}/>
+          </div>
+          <h1 className="text" style={{color:"white", textAlign:""}}>seller</h1>
+
+        </Link>
+      </div>
+    </div>
+          </Link></div>
 
         <div className="text-xl font-semibold"><Link to="audio2">
               <div className="main-container"> {/* Apply CSS class */}
@@ -30,7 +44,8 @@ const TextPage = () => {
         </Link>
       </div>
     </div>
-          </Link></div>
+          </Link></div></div>
+
       </div>
       {/* Main content */}
       <div className="flex flex-col flex-1">
