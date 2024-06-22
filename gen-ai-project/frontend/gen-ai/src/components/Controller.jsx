@@ -31,7 +31,6 @@ const Controller = () => {
         // Sending audio file to backend AND selected language
         const formData = new FormData();
         formData.append("audio", blob, "myFile.wav");
-        formData.append("language", selectedLanguage);
         formData.append("jd", jobDescription);
         formData.append("exp", experience);
 
@@ -64,9 +63,9 @@ const Controller = () => {
   };
 
   return (
-    <div className="h-screen overflow-y-hidden">
+    <div className="h-screen overflow-y-hidden bg-gray-200">
       <Title setMessages={setMessages} />
-      <div className="flex flex-col justify-betwwen h-full overflow-y-scroll pb-96">
+      <div className="flex flex-col justify-between h-full overflow-y-scroll pb-96">
         {/* Conversation */}
         <div className="mt-5 px-5">
           {messages.map((audio, index) => {
@@ -102,10 +101,10 @@ const Controller = () => {
 
           {messages.length === 0 && !isLoading && (
             <div className="flex flex-col items-center">
-              <div className="text-center font-dark text-white italic mt-10">
+              <div className="text-center font-dark text-gray-700 italic mt-10">
                 Send chatbook a message...
               </div>
-              <Dropdown setSelectedLanguageMain={setSelectedLanguage} />
+              
               <div className="mt-4">
                 <input
                   type="text"
@@ -127,14 +126,14 @@ const Controller = () => {
             </div>
           )}
           {isLoading && (
-            <div className="text-center text-white italic mt-10 animate-pulse">
+            <div className="text-center text-gray-700 italic mt-10 animate-pulse">
               Please wait a moment...
             </div>
           )}
         </div>
 
         {/* Recorder */}
-        <div className="fixed bottom-0 w-full py-6 border-t text-center bg-gradient-to-r from-gray-800 to-gray-950">
+        <div className="fixed bottom-0 w-full py-6 border-t text-center bg-gradient-to-r from-gray-600 to-gray-800">
           <div className="flex justify-center items-center w-full">
             <RecordMessage handleStop={handleStop} />
           </div>

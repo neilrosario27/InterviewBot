@@ -99,7 +99,7 @@ def base64_to_mp3(base64_string):
 
 
 @app.post("/getaudio/")
-async def get_audio(jd: str = Form(...),exp: str = Form(...),language: str = Form(...), audio: UploadFile = File(...)):
+async def get_audio(jd: str = Form(...),exp: str = Form(...), audio: UploadFile = File(...)):
     try:
 
         # Save the uploaded audio file
@@ -112,114 +112,114 @@ async def get_audio(jd: str = Form(...),exp: str = Form(...),language: str = For
         # mp3_data = await audio.read()
         # base64_encoded_data = base64.b64encode(mp3_data).decode('utf-8')
        
-        if language == 'hindi':
-            # input_lang = "hi"
-            # sst_ind = await asr2(input_lang, base64_encoded_data)   # audio to indic text
-            # print("sst_ind", sst_ind)
-            # tt_eng = indic_to_english_text(input_lang, sst_ind)    # indic text to eng text
-            # print(tt_eng)
-            # emotion = sentimemt(tt_eng)
-            # text_query_pdf = starting_point(tt_eng, emotion)  # query
-            # print(text_query_pdf)
-            # tt_ind = english_to_indic_text(input_lang, text_query_pdf)  # eng reply to indic text
-            # print(tt_ind)
-            # tts_b64 = tts(input_lang, tt_ind)
-            # tts_ind = base64_to_mp3(tts_b64)    #indic text to voice
+        # if language == 'hindi':
+        #     # input_lang = "hi"
+        #     # sst_ind = await asr2(input_lang, base64_encoded_data)   # audio to indic text
+        #     # print("sst_ind", sst_ind)
+        #     # tt_eng = indic_to_english_text(input_lang, sst_ind)    # indic text to eng text
+        #     # print(tt_eng)
+        #     # emotion = sentimemt(tt_eng)
+        #     # text_query_pdf = starting_point(tt_eng, emotion)  # query
+        #     # print(text_query_pdf)
+        #     # tt_ind = english_to_indic_text(input_lang, text_query_pdf)  # eng reply to indic text
+        #     # print(tt_ind)
+        #     # tts_b64 = tts(input_lang, tt_ind)
+        #     # tts_ind = base64_to_mp3(tts_b64)    #indic text to voice
 
-            input_lang="hi"
-            sst_ind = mp3_to_text(input_lang, audio_input)
-            tt_eng = indic_to_english_text(input_lang, sst_ind)
-            emotion = sentimemt(tt_eng)
-            text_query_pdf = starting_point(tt_eng, emotion)
-            tt_ind = english_to_indic_text(input_lang, text_query_pdf)
-            tts_b64 = tts(input_lang, tt_ind)
-            tts_ind = base64_to_mp3(tts_b64)
-            def iterfile():
-                with open(tts_ind, "rb") as audio_file:
-                    yield from audio_file
-                os.remove(tts_ind)
-            return StreamingResponse(iterfile(),media_type="application/octet-stream")
-        elif language == 'marathi':
-            input_lang="mr"
-            sst_ind = mp3_to_text(input_lang, audio_input)
-            tt_eng = indic_to_english_text(input_lang, sst_ind)
-            emotion = sentimemt(tt_eng)
-            text_query_pdf = starting_point(tt_eng, emotion)
-            tt_ind = english_to_indic_text(input_lang, text_query_pdf)
-            tts_b64 = tts(input_lang, tt_ind)
-            tts_ind = base64_to_mp3(tts_b64)
-            def iterfile():
-                with open(tts_ind, "rb") as audio_file:
-                    yield from audio_file
-                os.remove(tts_ind)
-            return StreamingResponse(iterfile(),media_type="application/octet-stream")
-        elif language == 'tamil':
-            input_lang="ta"
-            sst_ind = mp3_to_text(input_lang, audio_input)
-            tt_eng = indic_to_english_text(input_lang, sst_ind)
-            emotion = sentimemt(tt_eng)
-            text_query_pdf = starting_point(tt_eng, emotion)
-            tt_ind = english_to_indic_text(input_lang, text_query_pdf)
-            tts_b64 = tts(input_lang, tt_ind)
-            tts_ind = base64_to_mp3(tts_b64)
-            def iterfile():
-                with open(tts_ind, "rb") as audio_file:
-                    yield from audio_file
-                os.remove(tts_ind)
-            return StreamingResponse(iterfile(),media_type="application/octet-stream")
-        elif language == 'Kannada':
-            input_lang="kn"
-            sst_ind = mp3_to_text(input_lang, audio_input)
-            tt_eng = indic_to_english_text(input_lang, sst_ind)
-            emotion = sentimemt(tt_eng)
-            text_query_pdf = starting_point(tt_eng, emotion)
-            tt_ind = english_to_indic_text(input_lang, text_query_pdf)
-            tts_b64 = tts(input_lang, tt_ind)
-            tts_ind = base64_to_mp3(tts_b64)
-            def iterfile():
-                with open(tts_ind, "rb") as audio_file:
-                    yield from audio_file
-                os.remove(tts_ind)
-            return StreamingResponse(iterfile(),media_type="application/octet-stream")
-        elif language == 'Urdu':
-            input_lang="ur"
-            sst_ind = mp3_to_text(input_lang, audio_input)
-            tt_eng = indic_to_english_text(input_lang, sst_ind)
-            emotion = sentimemt(tt_eng)
-            text_query_pdf = starting_point(tt_eng, emotion)
-            tt_ind = english_to_indic_text(input_lang, text_query_pdf)
-            tts_b64 = tts(input_lang, tt_ind)
-            tts_ind = base64_to_mp3(tts_b64)
-            def iterfile():
-                with open(tts_ind, "rb") as audio_file:
-                    yield from audio_file
-                os.remove(tts_ind)
-            return StreamingResponse(iterfile(),media_type="application/octet-stream")
-        elif language == 'Nepali':
-            input_lang="ne"
-            sst_ind = mp3_to_text(input_lang, audio_input)
-            tt_eng = indic_to_english_text(input_lang, sst_ind)
-            emotion = sentimemt(tt_eng)
-            text_query_pdf = starting_point(tt_eng, emotion)
-            tt_ind = english_to_indic_text(input_lang, text_query_pdf)
-            tts_b64 = tts(input_lang, tt_ind)
-            tts_ind = base64_to_mp3(tts_b64)
-            def iterfile():
-                with open(tts_ind, "rb") as audio_file:
-                    yield from audio_file
-                os.remove(tts_ind)
-            return StreamingResponse(iterfile(),media_type="application/octet-stream")  
-        else:
-            input_lang = "en"
-            sst_ind = mp3_to_text(input_lang, audio_input)
-            text_query_pdf = starting_point(sst_ind, jd, exp)
-            tts_b64 = tts(input_lang, text_query_pdf)
-            tts_ind = base64_to_mp3(tts_b64)
-            def iterfile():
-                with open(tts_ind, "rb") as audio_file:
-                    yield from audio_file
-                os.remove(tts_ind)
-            return StreamingResponse(iterfile(),media_type="application/octet-stream")
+        #     input_lang="hi"
+        #     sst_ind = mp3_to_text(input_lang, audio_input)
+        #     tt_eng = indic_to_english_text(input_lang, sst_ind)
+        #     emotion = sentimemt(tt_eng)
+        #     text_query_pdf = starting_point(tt_eng, emotion)
+        #     tt_ind = english_to_indic_text(input_lang, text_query_pdf)
+        #     tts_b64 = tts(input_lang, tt_ind)
+        #     tts_ind = base64_to_mp3(tts_b64)
+        #     def iterfile():
+        #         with open(tts_ind, "rb") as audio_file:
+        #             yield from audio_file
+        #         os.remove(tts_ind)
+        #     return StreamingResponse(iterfile(),media_type="application/octet-stream")
+        # elif language == 'marathi':
+        #     input_lang="mr"
+        #     sst_ind = mp3_to_text(input_lang, audio_input)
+        #     tt_eng = indic_to_english_text(input_lang, sst_ind)
+        #     emotion = sentimemt(tt_eng)
+        #     text_query_pdf = starting_point(tt_eng, emotion)
+        #     tt_ind = english_to_indic_text(input_lang, text_query_pdf)
+        #     tts_b64 = tts(input_lang, tt_ind)
+        #     tts_ind = base64_to_mp3(tts_b64)
+        #     def iterfile():
+        #         with open(tts_ind, "rb") as audio_file:
+        #             yield from audio_file
+        #         os.remove(tts_ind)
+        #     return StreamingResponse(iterfile(),media_type="application/octet-stream")
+        # elif language == 'tamil':
+        #     input_lang="ta"
+        #     sst_ind = mp3_to_text(input_lang, audio_input)
+        #     tt_eng = indic_to_english_text(input_lang, sst_ind)
+        #     emotion = sentimemt(tt_eng)
+        #     text_query_pdf = starting_point(tt_eng, emotion)
+        #     tt_ind = english_to_indic_text(input_lang, text_query_pdf)
+        #     tts_b64 = tts(input_lang, tt_ind)
+        #     tts_ind = base64_to_mp3(tts_b64)
+        #     def iterfile():
+        #         with open(tts_ind, "rb") as audio_file:
+        #             yield from audio_file
+        #         os.remove(tts_ind)
+        #     return StreamingResponse(iterfile(),media_type="application/octet-stream")
+        # elif language == 'Kannada':
+        #     input_lang="kn"
+        #     sst_ind = mp3_to_text(input_lang, audio_input)
+        #     tt_eng = indic_to_english_text(input_lang, sst_ind)
+        #     emotion = sentimemt(tt_eng)
+        #     text_query_pdf = starting_point(tt_eng, emotion)
+        #     tt_ind = english_to_indic_text(input_lang, text_query_pdf)
+        #     tts_b64 = tts(input_lang, tt_ind)
+        #     tts_ind = base64_to_mp3(tts_b64)
+        #     def iterfile():
+        #         with open(tts_ind, "rb") as audio_file:
+        #             yield from audio_file
+        #         os.remove(tts_ind)
+        #     return StreamingResponse(iterfile(),media_type="application/octet-stream")
+        # elif language == 'Urdu':
+        #     input_lang="ur"
+        #     sst_ind = mp3_to_text(input_lang, audio_input)
+        #     tt_eng = indic_to_english_text(input_lang, sst_ind)
+        #     emotion = sentimemt(tt_eng)
+        #     text_query_pdf = starting_point(tt_eng, emotion)
+        #     tt_ind = english_to_indic_text(input_lang, text_query_pdf)
+        #     tts_b64 = tts(input_lang, tt_ind)
+        #     tts_ind = base64_to_mp3(tts_b64)
+        #     def iterfile():
+        #         with open(tts_ind, "rb") as audio_file:
+        #             yield from audio_file
+        #         os.remove(tts_ind)
+        #     return StreamingResponse(iterfile(),media_type="application/octet-stream")
+        # elif language == 'Nepali':
+        #     input_lang="ne"
+        #     sst_ind = mp3_to_text(input_lang, audio_input)
+        #     tt_eng = indic_to_english_text(input_lang, sst_ind)
+        #     emotion = sentimemt(tt_eng)
+        #     text_query_pdf = starting_point(tt_eng, emotion)
+        #     tt_ind = english_to_indic_text(input_lang, text_query_pdf)
+        #     tts_b64 = tts(input_lang, tt_ind)
+        #     tts_ind = base64_to_mp3(tts_b64)
+        #     def iterfile():
+        #         with open(tts_ind, "rb") as audio_file:
+        #             yield from audio_file
+        #         os.remove(tts_ind)
+        #     return StreamingResponse(iterfile(),media_type="application/octet-stream")  
+        # else:
+        input_lang = "en"
+        sst_ind = mp3_to_text(input_lang, audio_input)
+        text_query_pdf = starting_point(sst_ind, jd, exp)
+        tts_b64 = tts(input_lang, text_query_pdf)
+        tts_ind = base64_to_mp3(tts_b64)
+        def iterfile():
+            with open(tts_ind, "rb") as audio_file:
+                yield from audio_file
+            os.remove(tts_ind)
+        return StreamingResponse(iterfile(),media_type="application/octet-stream")
 
     except Exception as e:
         print(f"Error: {str(e)}")
@@ -230,166 +230,166 @@ async def get_audio(jd: str = Form(...),exp: str = Form(...),language: str = For
 input_lang = ""
 
 @app.post("/gettext/")
-async def get_text(jd: str = Form(...),exp: str = Form(...), text: str = Form(...), language: str = Form(...)):
+async def get_text(jd: str = Form(...),exp: str = Form(...), text: str = Form(...)):
     try:
-        if language == 'hindi':
-            input_lang = "hi"
-            input_to_query = indic_to_english_text(input_lang, text)
-            emotion = sentimemt(input_to_query)
-            answer_to_indic = starting_point(input_to_query,emotion)    # change to conv chain
-            final_answer = english_to_indic_text(input_lang, answer_to_indic)
-            response_text = final_answer
-        elif language == 'marathi':
-            input_lang = "mr"
-            input_to_query = indic_to_english_text(input_lang, text)
-            emotion = sentimemt(input_to_query)
-            answer_to_indic = starting_point(input_to_query,emotion)      # change to conv chain
-            final_answer = english_to_indic_text(input_lang, answer_to_indic)
-            response_text = final_answer
-        elif language == 'tamil':
-            input_lang = "ta"
-            input_to_query = indic_to_english_text(input_lang, text)
-            emotion = sentimemt(input_to_query)
-            answer_to_indic = starting_point(input_to_query,emotion)        # change to conv chain
-            final_answer = english_to_indic_text(input_lang, answer_to_indic)
-            response_text = final_answer
-        elif language == 'gom':
-            input_lang = "gom"
-            input_to_query = indic_to_english_text(input_lang, text)
-            emotion = sentimemt(input_to_query)
-            answer_to_indic = starting_point(input_to_query,emotion)        # change to conv chain
-            final_answer = english_to_indic_text(input_lang, answer_to_indic)
-            response_text = final_answer
-        elif language == 'kannada':
-            input_lang = "kn"
-            input_to_query = indic_to_english_text(input_lang, text)
-            emotion = sentimemt(input_to_query)
-            answer_to_indic = starting_point(input_to_query,emotion)        # change to conv chain
-            final_answer = english_to_indic_text(input_lang, answer_to_indic)
-            response_text = final_answer
-        elif language == 'dogri':
-            input_lang = "doi"
-            input_to_query = indic_to_english_text(input_lang, text)
-            emotion = sentimemt(input_to_query)
-            answer_to_indic = starting_point(input_to_query,emotion)        # change to conv chain
-            final_answer = english_to_indic_text(input_lang, answer_to_indic)
-            response_text = final_answer
-        elif language == 'bodo':
-            input_lang = "brx"
-            input_to_query = indic_to_english_text(input_lang, text)
-            emotion = sentimemt(input_to_query)
-            answer_to_indic = starting_point(input_to_query,emotion)        # change to conv chain
-            final_answer = english_to_indic_text(input_lang, answer_to_indic)
-            response_text = final_answer
-        elif language == 'urdu':
-            input_lang = "ur"
-            input_to_query = indic_to_english_text(input_lang, text)
-            emotion = sentimemt(input_to_query)
-            answer_to_indic = starting_point(input_to_query,emotion)        # change to conv chain
-            final_answer = english_to_indic_text(input_lang, answer_to_indic)
-            response_text = final_answer
-        elif language == 'kashmiri':
-            input_lang = "ks"
-            input_to_query = indic_to_english_text(input_lang, text)
-            emotion = sentimemt(input_to_query)
-            answer_to_indic = starting_point(input_to_query,emotion)        # change to conv chain
-            final_answer = english_to_indic_text(input_lang, answer_to_indic)
-            response_text = final_answer
-        elif language == 'assamese':
-            input_lang = "as"
-            input_to_query = indic_to_english_text(input_lang, text)
-            emotion = sentimemt(input_to_query)
-            answer_to_indic = starting_point(input_to_query,emotion)        # change to conv chain
-            final_answer = english_to_indic_text(input_lang, answer_to_indic)
-            response_text = final_answer
-        elif language == 'bengali':
-            input_lang = "bn"
-            input_to_query = indic_to_english_text(input_lang, text)
-            emotion = sentimemt(input_to_query)
-            answer_to_indic = starting_point(input_to_query,emotion)        # change to conv chain
-            final_answer = english_to_indic_text(input_lang, answer_to_indic)
-            response_text = final_answer
-        elif language == 'sindhi':
-            input_lang = "sd"
-            input_to_query = indic_to_english_text(input_lang, text)
-            emotion = sentimemt(input_to_query)
-            answer_to_indic = starting_point(input_to_query,emotion)        # change to conv chain
-            final_answer = english_to_indic_text(input_lang, answer_to_indic)
-            response_text = final_answer
-        elif language == 'maithili':
-            input_lang = "mai"
-            input_to_query = indic_to_english_text(input_lang, text)
-            emotion = sentimemt(input_to_query)
-            answer_to_indic = starting_point(input_to_query,emotion)        # change to conv chain
-            final_answer = english_to_indic_text(input_lang, answer_to_indic)
-            response_text = final_answer
-        elif language == 'punjabi':
-            input_lang = "pa"
-            input_to_query = indic_to_english_text(input_lang, text)
-            emotion = sentimemt(input_to_query)
-            answer_to_indic = starting_point(input_to_query,emotion)        # change to conv chain
-            final_answer = english_to_indic_text(input_lang, answer_to_indic)
-            response_text = final_answer
-        elif language == 'malayalam':
-            input_lang = "ml"
-            input_to_query = indic_to_english_text(input_lang, text)
-            emotion = sentimemt(input_to_query)
-            answer_to_indic = starting_point(input_to_query,emotion)        # change to conv chain
-            final_answer = english_to_indic_text(input_lang, answer_to_indic)
-            response_text = final_answer
-        elif language == 'manipuri':
-            input_lang = "mni"
-            input_to_query = indic_to_english_text(input_lang, text)
-            emotion = sentimemt(input_to_query)
-            answer_to_indic = starting_point(input_to_query,emotion)        # change to conv chain
-            final_answer = english_to_indic_text(input_lang, answer_to_indic)
-            response_text = final_answer
-        elif language == 'telugu':
-            input_lang = "te"
-            input_to_query = indic_to_english_text(input_lang, text)
-            emotion = sentimemt(input_to_query)
-            answer_to_indic = starting_point(input_to_query,emotion)        # change to conv chain
-            final_answer = english_to_indic_text(input_lang, answer_to_indic)
-            response_text = final_answer
-        elif language == 'sanskrit':
-            input_lang = "sa"
-            input_to_query = indic_to_english_text(input_lang, text)
-            emotion = sentimemt(input_to_query)
-            answer_to_indic = starting_point(input_to_query,emotion)        # change to conv chain
-            final_answer = english_to_indic_text(input_lang, answer_to_indic)
-            response_text = final_answer
-        elif language == 'nepali':
-            input_lang = "ne"
-            input_to_query = indic_to_english_text(input_lang, text)
-            emotion = sentimemt(input_to_query)
-            answer_to_indic = starting_point(input_to_query,emotion)        # change to conv chain
-            final_answer = english_to_indic_text(input_lang, answer_to_indic)
-            response_text = final_answer
-        elif language == 'santali':
-            input_lang = "sat"
-            input_to_query = indic_to_english_text(input_lang, text)
-            emotion = sentimemt(input_to_query)
-            answer_to_indic = starting_point(input_to_query,emotion)        # change to conv chain
-            final_answer = english_to_indic_text(input_lang, answer_to_indic)
-            response_text = final_answer
-        elif language == 'gujarati':
-            input_lang = "gu"
-            input_to_query = indic_to_english_text(input_lang, text)
-            emotion = sentimemt(input_to_query)
-            answer_to_indic = starting_point(input_to_query,emotion)        # change to conv chain
-            final_answer = english_to_indic_text(input_lang, answer_to_indic)
-            response_text = final_answer
-        elif language == 'odia':
-            input_lang = "or"
-            input_to_query = indic_to_english_text(input_lang, text)
-            emotion = sentimemt(input_to_query)
-            answer_to_indic = starting_point(input_to_query,emotion)        # change to conv chain
-            final_answer = english_to_indic_text(input_lang, answer_to_indic)
-            response_text = final_answer
-        else:
+        # if language == 'hindi':
+        #     input_lang = "hi"
+        #     input_to_query = indic_to_english_text(input_lang, text)
+        #     emotion = sentimemt(input_to_query)
+        #     answer_to_indic = starting_point(input_to_query,emotion)    # change to conv chain
+        #     final_answer = english_to_indic_text(input_lang, answer_to_indic)
+        #     response_text = final_answer
+        # elif language == 'marathi':
+        #     input_lang = "mr"
+        #     input_to_query = indic_to_english_text(input_lang, text)
+        #     emotion = sentimemt(input_to_query)
+        #     answer_to_indic = starting_point(input_to_query,emotion)      # change to conv chain
+        #     final_answer = english_to_indic_text(input_lang, answer_to_indic)
+        #     response_text = final_answer
+        # elif language == 'tamil':
+        #     input_lang = "ta"
+        #     input_to_query = indic_to_english_text(input_lang, text)
+        #     emotion = sentimemt(input_to_query)
+        #     answer_to_indic = starting_point(input_to_query,emotion)        # change to conv chain
+        #     final_answer = english_to_indic_text(input_lang, answer_to_indic)
+        #     response_text = final_answer
+        # elif language == 'gom':
+        #     input_lang = "gom"
+        #     input_to_query = indic_to_english_text(input_lang, text)
+        #     emotion = sentimemt(input_to_query)
+        #     answer_to_indic = starting_point(input_to_query,emotion)        # change to conv chain
+        #     final_answer = english_to_indic_text(input_lang, answer_to_indic)
+        #     response_text = final_answer
+        # elif language == 'kannada':
+        #     input_lang = "kn"
+        #     input_to_query = indic_to_english_text(input_lang, text)
+        #     emotion = sentimemt(input_to_query)
+        #     answer_to_indic = starting_point(input_to_query,emotion)        # change to conv chain
+        #     final_answer = english_to_indic_text(input_lang, answer_to_indic)
+        #     response_text = final_answer
+        # elif language == 'dogri':
+        #     input_lang = "doi"
+        #     input_to_query = indic_to_english_text(input_lang, text)
+        #     emotion = sentimemt(input_to_query)
+        #     answer_to_indic = starting_point(input_to_query,emotion)        # change to conv chain
+        #     final_answer = english_to_indic_text(input_lang, answer_to_indic)
+        #     response_text = final_answer
+        # elif language == 'bodo':
+        #     input_lang = "brx"
+        #     input_to_query = indic_to_english_text(input_lang, text)
+        #     emotion = sentimemt(input_to_query)
+        #     answer_to_indic = starting_point(input_to_query,emotion)        # change to conv chain
+        #     final_answer = english_to_indic_text(input_lang, answer_to_indic)
+        #     response_text = final_answer
+        # elif language == 'urdu':
+        #     input_lang = "ur"
+        #     input_to_query = indic_to_english_text(input_lang, text)
+        #     emotion = sentimemt(input_to_query)
+        #     answer_to_indic = starting_point(input_to_query,emotion)        # change to conv chain
+        #     final_answer = english_to_indic_text(input_lang, answer_to_indic)
+        #     response_text = final_answer
+        # elif language == 'kashmiri':
+        #     input_lang = "ks"
+        #     input_to_query = indic_to_english_text(input_lang, text)
+        #     emotion = sentimemt(input_to_query)
+        #     answer_to_indic = starting_point(input_to_query,emotion)        # change to conv chain
+        #     final_answer = english_to_indic_text(input_lang, answer_to_indic)
+        #     response_text = final_answer
+        # elif language == 'assamese':
+        #     input_lang = "as"
+        #     input_to_query = indic_to_english_text(input_lang, text)
+        #     emotion = sentimemt(input_to_query)
+        #     answer_to_indic = starting_point(input_to_query,emotion)        # change to conv chain
+        #     final_answer = english_to_indic_text(input_lang, answer_to_indic)
+        #     response_text = final_answer
+        # elif language == 'bengali':
+        #     input_lang = "bn"
+        #     input_to_query = indic_to_english_text(input_lang, text)
+        #     emotion = sentimemt(input_to_query)
+        #     answer_to_indic = starting_point(input_to_query,emotion)        # change to conv chain
+        #     final_answer = english_to_indic_text(input_lang, answer_to_indic)
+        #     response_text = final_answer
+        # elif language == 'sindhi':
+        #     input_lang = "sd"
+        #     input_to_query = indic_to_english_text(input_lang, text)
+        #     emotion = sentimemt(input_to_query)
+        #     answer_to_indic = starting_point(input_to_query,emotion)        # change to conv chain
+        #     final_answer = english_to_indic_text(input_lang, answer_to_indic)
+        #     response_text = final_answer
+        # elif language == 'maithili':
+        #     input_lang = "mai"
+        #     input_to_query = indic_to_english_text(input_lang, text)
+        #     emotion = sentimemt(input_to_query)
+        #     answer_to_indic = starting_point(input_to_query,emotion)        # change to conv chain
+        #     final_answer = english_to_indic_text(input_lang, answer_to_indic)
+        #     response_text = final_answer
+        # elif language == 'punjabi':
+        #     input_lang = "pa"
+        #     input_to_query = indic_to_english_text(input_lang, text)
+        #     emotion = sentimemt(input_to_query)
+        #     answer_to_indic = starting_point(input_to_query,emotion)        # change to conv chain
+        #     final_answer = english_to_indic_text(input_lang, answer_to_indic)
+        #     response_text = final_answer
+        # elif language == 'malayalam':
+        #     input_lang = "ml"
+        #     input_to_query = indic_to_english_text(input_lang, text)
+        #     emotion = sentimemt(input_to_query)
+        #     answer_to_indic = starting_point(input_to_query,emotion)        # change to conv chain
+        #     final_answer = english_to_indic_text(input_lang, answer_to_indic)
+        #     response_text = final_answer
+        # elif language == 'manipuri':
+        #     input_lang = "mni"
+        #     input_to_query = indic_to_english_text(input_lang, text)
+        #     emotion = sentimemt(input_to_query)
+        #     answer_to_indic = starting_point(input_to_query,emotion)        # change to conv chain
+        #     final_answer = english_to_indic_text(input_lang, answer_to_indic)
+        #     response_text = final_answer
+        # elif language == 'telugu':
+        #     input_lang = "te"
+        #     input_to_query = indic_to_english_text(input_lang, text)
+        #     emotion = sentimemt(input_to_query)
+        #     answer_to_indic = starting_point(input_to_query,emotion)        # change to conv chain
+        #     final_answer = english_to_indic_text(input_lang, answer_to_indic)
+        #     response_text = final_answer
+        # elif language == 'sanskrit':
+        #     input_lang = "sa"
+        #     input_to_query = indic_to_english_text(input_lang, text)
+        #     emotion = sentimemt(input_to_query)
+        #     answer_to_indic = starting_point(input_to_query,emotion)        # change to conv chain
+        #     final_answer = english_to_indic_text(input_lang, answer_to_indic)
+        #     response_text = final_answer
+        # elif language == 'nepali':
+        #     input_lang = "ne"
+        #     input_to_query = indic_to_english_text(input_lang, text)
+        #     emotion = sentimemt(input_to_query)
+        #     answer_to_indic = starting_point(input_to_query,emotion)        # change to conv chain
+        #     final_answer = english_to_indic_text(input_lang, answer_to_indic)
+        #     response_text = final_answer
+        # elif language == 'santali':
+        #     input_lang = "sat"
+        #     input_to_query = indic_to_english_text(input_lang, text)
+        #     emotion = sentimemt(input_to_query)
+        #     answer_to_indic = starting_point(input_to_query,emotion)        # change to conv chain
+        #     final_answer = english_to_indic_text(input_lang, answer_to_indic)
+        #     response_text = final_answer
+        # elif language == 'gujarati':
+        #     input_lang = "gu"
+        #     input_to_query = indic_to_english_text(input_lang, text)
+        #     emotion = sentimemt(input_to_query)
+        #     answer_to_indic = starting_point(input_to_query,emotion)        # change to conv chain
+        #     final_answer = english_to_indic_text(input_lang, answer_to_indic)
+        #     response_text = final_answer
+        # elif language == 'odia':
+        #     input_lang = "or"
+        #     input_to_query = indic_to_english_text(input_lang, text)
+        #     emotion = sentimemt(input_to_query)
+        #     answer_to_indic = starting_point(input_to_query,emotion)        # change to conv chain
+        #     final_answer = english_to_indic_text(input_lang, answer_to_indic)
+        #     response_text = final_answer
+        # else:
             # emotion = sentimemt(text)
-            text_query_pdf = starting_point(text, jd, exp)       # change to conv chain
-            response_text = text_query_pdf
+        text_query_pdf = starting_point(text, jd, exp)       # change to conv chain
+        response_text = text_query_pdf
         return JSONResponse(content={"text": response_text, "success": True}, status_code=200)
     except Exception as e:
         print(f"Error: {str(e)}")
