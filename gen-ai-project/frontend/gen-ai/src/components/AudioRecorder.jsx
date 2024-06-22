@@ -120,6 +120,13 @@ const AudioRecorder = ({ onAudioReady, updateTextValue }) => {
                   >
                     Start Recording
                   </button>
+                  <input
+                    type="text"
+                    value={jd}
+                    onChange={(e) => setJd(e.target.value)}
+                    className="flex-1 p-2 border border-gray-300 rounded"
+                    placeholder="Enter JD"
+                  />
                   <label className="flex items-center space-x-2 mr-2">
                     Language:
                     <select
@@ -151,6 +158,7 @@ const AudioRecorder = ({ onAudioReady, updateTextValue }) => {
                       <option value="tamil">Odia</option>
                     </select>
                   </label>
+                  
                 </div>
               ) : null}
               {recordingStatus === "recording" ? (
@@ -203,102 +211,3 @@ const AudioRecorder = ({ onAudioReady, updateTextValue }) => {
 };
 
 export default AudioRecorder;
-// import React, { useState, useRef } from "react";
-
-// const mimeType = "audio/webm";
-
-// const AudioRecorder = ({ onAudioReady, updateTextValue }) => {
-//   const [permission, setPermission] = useState(false);
-//   const [selectedLanguage, setSelectedLanguage] = useState("english");
-//   const mediaRecorder = useRef(null);
-//   const [recordingStatus, setRecordingStatus] = useState("inactive");
-//   const [stream, setStream] = useState(null);
-//   const [audio, setAudio] = useState(null);
-//   const [audioChunks, setAudioChunks] = useState([]);
-//   const [isLoading, setIsLoading] = useState(false); // Add a loading state
-
-//   const getMicrophonePermission = async () => {
-//     if ("MediaRecorder" in window) {
-//       try {
-//         const mediaStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
-//         setPermission(true);
-//         setStream(mediaStream);
-//       } catch (err) {
-//         alert(err.message);
-//       }
-//     } else {
-//       alert("The MediaRecorder API is not supported in your browser.");
-//     }
-//   };
-
-//   const startRecording = async () => {
-//     setRecordingStatus("recording");
-//     const media = new MediaRecorder(stream, { type: mimeType });
-//     mediaRecorder.current = media;
-//     mediaRecorder.current.start();
-//     let localAudioChunks = [];
-//     mediaRecorder.current.ondataavailable = (event) => {
-//       if (event.data.size > 0) {
-//         localAudioChunks.push(event.data);
-//       }
-//     };
-//     setAudioChunks(localAudioChunks);
-//   };
-
-//   const stopRecording = async () => {
-//     setRecordingStatus("inactive");
-//     mediaRecorder.current.stop();
-//     mediaRecorder.current.onstop = async () => {
-//       const audioBlob = new Blob(audioChunks, { type: mimeType });
-//       const audioUrl = URL.createObjectURL(audioBlob);
-//       setAudio(audioUrl);
-//       sendDataToServer(audioBlob);
-//     };
-//   };
-
-//   const sendDataToServer = async (audioBlob) => {
-//     setIsLoading(true); // Indicate loading
-//     const formData = new FormData();
-//     formData.append("inputType", "audio");
-//     formData.append("language", selectedLanguage);
-//     formData.append("text", "NULL");
-//     formData.append("audio", audioBlob, "recordedAudio.weba");
-
-//     try {
-//       const response = await fetch("http://localhost:5000/getaudio", {
-//         method: "POST",
-//         body: formData,
-//       });
-
-//       if (response.ok) {
-//         const jsonResponse = await response.json();
-//         console.log("Data successfully sent to server", jsonResponse);
-//         const audiotext = jsonResponse.text;
-//         updateTextValue(audiotext);
-//         onAudioReady();
-//       } else {
-//         console.error("Failed to send data to server");
-//       }
-//     } catch (error) {
-//       console.error("Error sending data to server:", error);
-//     } finally {
-//       setIsLoading(false); // Loading complete
-//     }
-//   };
-
-//   return (
-//     <div>
-//       <div className="p-4 border-gray-200 m-4">
-//         <div className="flex gap-4 border-gray-900">
-//           <main className="font-sans text-base leading-6">
-//             {/* Existing buttons and input fields */}
-//           </main>
-//         </div>
-//         {isLoading && <div className="text-center">Uploading...</div>} {/* Loading indicator */}
-//       </div>
-//       {/* Privacy Policy and other static content */}
-//     </div>
-//   );
-// };
-
-// export default AudioRecorder;

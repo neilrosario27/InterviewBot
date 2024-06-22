@@ -19,21 +19,16 @@ const App = () => {
     <div className="w-screen min-h-screen bg-img">
 
     <BrowserRouter>
-    <Navbar />
+   
       <Routes>
-          <Route path="/main" element={<AuthenticatedWrapper>
-                <MainPage />
-              </AuthenticatedWrapper>} />
-          <Route path="/" element={<PreMain />} />
+
           <Route path="/text" element={<AuthenticatedWrapper><TextPage /></AuthenticatedWrapper>} />
           <Route path="/audio" element={<AuthenticatedWrapper><AudioPage /></AuthenticatedWrapper>} />
-          <Route path="/viva" element={<AuthenticatedWrapper><VivaPage /></AuthenticatedWrapper> } />
+
           <Route path="/summary" element={<AuthenticatedWrapper><SummaryPage/></AuthenticatedWrapper> } />
-          <Route path="/premain" element={<AuthenticatedWrapper><PreMain /></AuthenticatedWrapper> } />
+ 
           <Route path="/audio2" element={<AuthenticatedWrapper><Audiopage2 /></AuthenticatedWrapper> } />
-          <Route path="/home2" element={<AuthenticatedWrapper><Home2 /></AuthenticatedWrapper> } />
-          <Route path="/mcq" element={<AuthenticatedWrapper><McqPage /></AuthenticatedWrapper> } />
-          <Route path="/url" element={<AuthenticatedWrapper><UrlPage/> </AuthenticatedWrapper> } />
+
       </Routes>
     </BrowserRouter>
     </div>

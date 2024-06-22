@@ -3,11 +3,15 @@ import React, { useState } from "react";
 const TextInput = ({ updateTextValue }) => {
   const [text, setText] = useState("");
   const [selectedLanguage, setSelectedLanguage] = useState("english");
+  const [jd, setJd] = useState(""); // State for jd
+  const [exp, setExp] = useState(""); // State for exp
 
   const sendTextInputToServer = async () => {
     const formData = new FormData();
     formData.append("text", text);
     formData.append("language", selectedLanguage);
+    formData.append("jd", jd); // Append jd to formData
+    formData.append("exp", exp); // Append exp to formData
 
     try {
       const response = await fetch("http://localhost:8000/gettext", {
@@ -20,6 +24,7 @@ const TextInput = ({ updateTextValue }) => {
         if (jsonResponse.success) {
           updateTextValue(text, jsonResponse.text);
           setText(""); // Clear the text input after sending
+         
         } else {
           console.error("Server processed request, but returned an error");
         }
@@ -32,7 +37,6 @@ const TextInput = ({ updateTextValue }) => {
   };
 
   return (
- 
     <div className="p-4 border-t border-gray-200">
       <form
         onSubmit={(e) => {
@@ -47,6 +51,20 @@ const TextInput = ({ updateTextValue }) => {
           onChange={(e) => setText(e.target.value)}
           className="flex-1 p-2 border border-gray-300 rounded"
           placeholder="What do you wanna know.."
+        />
+        <input
+          type="text"
+          value={jd}
+          onChange={(e) => setJd(e.target.value)}
+          className="flex-1 p-2 border border-gray-300 rounded"
+          placeholder="Enter JD"
+        />
+        <input
+          type="text"
+          value={exp}
+          onChange={(e) => setExp(e.target.value)}
+          className="flex-1 p-2 border border-gray-300 rounded"
+          placeholder="Enter Experience"
         />
         <button type="submit" className="bg-blue-500 text-white rounded px-4 py-2">Send Text</button>
         <select

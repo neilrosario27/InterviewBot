@@ -34,39 +34,39 @@ app.add_middleware(
 )
 
 
-@app.post("/getpdf/")
-async def get_pdf(pdf_file: UploadFile = File(...)):
-    try:
-        if pdf_file:
-            current_script_dir = os.path.dirname(os.path.abspath(__file__))
-            directory_path = os.path.join(current_script_dir, 'data')
-            if not os.path.exists(directory_path):
-                os.makedirs(directory_path)
-            file_path = os.path.join( directory_path, 'data.pdf')
-            with open(file_path, "wb") as file_object:
-                file_object.write(await pdf_file.read())
-            print('PDF file saved successfully')
-            process_pinecone()
-            return JSONResponse(content={"success": True, "message": "PDF received and saved successfully"}, status_code=200)
-    except Exception as e:
-        print(f"Error: {str(e)}")
-        return JSONResponse(content={"success": False, "message": f"Error processing PDF: {str(e)}"}, status_code=500)
+# @app.post("/getpdf/")
+# async def get_pdf(pdf_file: UploadFile = File(...)):
+#     try:
+#         if pdf_file:
+#             current_script_dir = os.path.dirname(os.path.abspath(__file__))
+#             directory_path = os.path.join(current_script_dir, 'data')
+#             if not os.path.exists(directory_path):
+#                 os.makedirs(directory_path)
+#             file_path = os.path.join( directory_path, 'data.pdf')
+#             with open(file_path, "wb") as file_object:
+#                 file_object.write(await pdf_file.read())
+#             print('PDF file saved successfully')
+#             process_pinecone()
+#             return JSONResponse(content={"success": True, "message": "PDF received and saved successfully"}, status_code=200)
+#     except Exception as e:
+#         print(f"Error: {str(e)}")
+#         return JSONResponse(content={"success": False, "message": f"Error processing PDF: {str(e)}"}, status_code=500)
 
 
-@app.get("/resetpinecone/")
-async def reset_pinecone():
-    reset_the_pinecone()
+# @app.get("/resetpinecone/")
+# async def reset_pinecone():
+#     reset_the_pinecone()
 
 
 
 
-def sentimemt(text):
-    classifier = pipeline(task="text-classification", model="SamLowe/roberta-base-go_emotions", top_k=None)
-    sentences = [text]
+# def sentimemt(text):
+#     classifier = pipeline(task="text-classification", model="SamLowe/roberta-base-go_emotions", top_k=None)
+#     sentences = [text]
 
-    model_outputs = classifier(sentences)
-    print ("emotion", model_outputs[0][0]['label'])
-    return model_outputs[0][0]['label']
+#     model_outputs = classifier(sentences)
+#     print ("emotion", model_outputs[0][0]['label'])
+#     return model_outputs[0][0]['label']
 
 
 
@@ -99,7 +99,7 @@ def base64_to_mp3(base64_string):
 
 
 @app.post("/getaudio/")
-async def get_audio(language: str = Form(...), audio: UploadFile = File(...)):
+async def get_audio(jd: str = Form(...),exp: str = Form(...),language: str = Form(...), audio: UploadFile = File(...)):
     try:
 
         # Save the uploaded audio file
@@ -212,8 +212,7 @@ async def get_audio(language: str = Form(...), audio: UploadFile = File(...)):
         else:
             input_lang = "en"
             sst_ind = mp3_to_text(input_lang, audio_input)
-            emotion = sentimemt(sst_ind)
-            text_query_pdf = starting_point(sst_ind,  emotion)
+            text_query_pdf = starting_point(sst_ind, jd, exp)
             tts_b64 = tts(input_lang, text_query_pdf)
             tts_ind = base64_to_mp3(tts_b64)
             def iterfile():
@@ -231,7 +230,7 @@ async def get_audio(language: str = Form(...), audio: UploadFile = File(...)):
 input_lang = ""
 
 @app.post("/gettext/")
-async def get_text(text: str = Form(...), language: str = Form(...)):
+async def get_text(jd: str = Form(...),exp: str = Form(...), text: str = Form(...), language: str = Form(...)):
     try:
         if language == 'hindi':
             input_lang = "hi"
@@ -388,13 +387,46 @@ async def get_text(text: str = Form(...), language: str = Form(...)):
             final_answer = english_to_indic_text(input_lang, answer_to_indic)
             response_text = final_answer
         else:
-            emotion = sentimemt(text)
-            text_query_pdf = starting_point(text,emotion)       # change to conv chain
+            # emotion = sentimemt(text)
+            text_query_pdf = starting_point(text, jd, exp)       # change to conv chain
             response_text = text_query_pdf
         return JSONResponse(content={"text": response_text, "success": True}, status_code=200)
     except Exception as e:
         print(f"Error: {str(e)}")
         return JSONResponse(content={"success": False, "message": "Error processing text"}, status_code=500)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
